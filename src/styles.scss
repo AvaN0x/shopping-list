@@ -9,12 +9,27 @@
 @include mat.core();
 
 // Define the theme object.
-$shopping-list-theme: mat.define-theme(
+
+$_primary: mat.$yellow-palette;
+$_tertiary: mat.$orange-palette;
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: $_primary,
+      tertiary: $_tertiary,
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
+$dark-theme: mat.define-theme(
   (
     color: (
       theme-type: dark,
-      primary: mat.$yellow-palette,
-      tertiary: mat.$orange-palette,
+      primary: $_primary,
+      tertiary: $_tertiary,
     ),
     density: (
       scale: 0,
@@ -26,7 +41,11 @@ $shopping-list-theme: mat.define-theme(
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 :root {
-  @include mat.all-component-themes($shopping-list-theme);
+  @include mat.all-component-themes($light-theme);
+
+  @media (prefers-color-scheme: dark) {
+    @include mat.all-component-colors($dark-theme);
+  }
 }
 
 // Comment out the line below if you want to use the pre-defined typography utility classes.
