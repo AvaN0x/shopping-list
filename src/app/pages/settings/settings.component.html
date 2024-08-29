@@ -1,1 +1,8 @@
 <p>settings</p>
+<pre>
+{{themeService.currentTheme}}
+{{themeService.appliedTheme}}
+</pre>
+<button mat-button (click)="themeService.setThemeMode('dark')">dark</button>
+<button mat-button (click)="themeService.setThemeMode('light')">light</button>
+<button mat-button (click)="themeService.setThemeMode('device')">device</button>
