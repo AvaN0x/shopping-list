@@ -1,11 +1,11 @@
 @mixin if-light-theme {
-  :host-context(.theme-light) {
+  :host-context(.theme-light) & {
     @content;
   }
 }
 
 @mixin if-dark-theme {
-  :host-context(.theme-dark) {
+  :host-context(.theme-dark) & {
     @content;
   }
 }
