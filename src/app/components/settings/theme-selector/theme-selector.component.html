@@ -1,0 +1,16 @@
+<label id="theme-radio-group-label">Apparence</label>
+<mat-radio-group aria-labelledby="theme-radio-group-label" [value]="themeService.currentTheme"
+  (change)="themeService.setThemeMode($event.value)">
+  <mat-radio-button value="light">
+    <mat-icon fontIcon="light_mode"></mat-icon>
+    Thème clair
+  </mat-radio-button>
+  <mat-radio-button value="dark">
+    <mat-icon fontIcon="dark_mode" fontSet=""></mat-icon>
+    Thème sombre
+  </mat-radio-button>
+  <mat-radio-button value="device">
+    <mat-icon fontIcon="devices"></mat-icon>
+    Thème de l'appareil
+  </mat-radio-button>
+</mat-radio-group>
