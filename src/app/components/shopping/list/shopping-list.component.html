@@ -7,3 +7,11 @@
   }
 </div>
 }
+<hr />
+<div>Non triés</div>
+<div cdkDropList #categoryList="cdkDropList" [cdkDropListData]="unsortedItems()"
+  [cdkDropListConnectedTo]="categoriesLists()" class="example-list" (cdkDropListDropped)="drop($event)">
+  @for (itemId of unsortedItems(); track itemId) {
+  <app-shopping-list-item class="example-box" [itemId]="itemId" cdkDrag />
+  }
+</div>

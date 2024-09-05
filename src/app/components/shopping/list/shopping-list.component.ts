@@ -17,10 +17,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { ShoppingStore } from '../../../services/shopping-stores.service.modele';
 import { ShoppingListItemComponent } from './item/shopping-list-item.component';
-import {
-  ShoppingItemId,
-  ShoppingItems,
-} from '../../../services/shopping-items.service.modele';
+import { ShoppingItemId } from '../../../services/shopping-items.service.modele';
 
 @Component({
   selector: 'app-shopping-list',
@@ -34,6 +31,16 @@ export class ShoppingListComponent {
   storesService = inject(ShoppingStoresService);
 
   store: ShoppingStore;
+  unsortedItems: Signal<ShoppingItemId[]> = computed(() => {
+    const itemsIds = Object.keys(this.itemsService.items());
+
+    // Go through the store categories and items to find the items that are not in any category
+    const itemsInCategories = this.store.categories.flatMap(
+      (category) => category.itemsIds
+    );
+
+    return itemsIds.filter((itemId) => !itemsInCategories.includes(itemId));
+  });
 
   _categoriesLists = viewChildren<CdkDropList>('categoryList');
 
