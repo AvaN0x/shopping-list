@@ -7,22 +7,20 @@ import {
 } from '@angular/core';
 import { ShoppingItemsService } from '../../../services/shopping-items.service';
 import { ShoppingStoresService } from '../../../services/shopping-stores.service';
-import { JsonPipe } from '@angular/common';
+import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import type { CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import {
-  CdkDragDrop,
-  moveItemInArray,
-  transferArrayItem,
-  CdkDrag,
-  CdkDropList,
-} from '@angular/cdk/drag-drop';
-import { ShoppingStore } from '../../../services/shopping-stores.service.modele';
-import { ShoppingListItemComponent } from './item/shopping-list-item.component';
+  ShoppingStore,
+  ShoppingStoreCategory,
+} from '../../../services/shopping-stores.service.modele';
 import { ShoppingItemId } from '../../../services/shopping-items.service.modele';
+import { ShoppingListCategoryComponent } from './category/shopping-list-category.component';
+import { NULL_UUID } from '../../../utils/uuid';
 
 @Component({
   selector: 'app-shopping-list',
   standalone: true,
-  imports: [JsonPipe, CdkDropList, CdkDrag, ShoppingListItemComponent],
+  imports: [ShoppingListCategoryComponent],
   templateUrl: './shopping-list.component.html',
   styleUrl: './shopping-list.component.scss',
 })
@@ -31,7 +29,7 @@ export class ShoppingListComponent {
   storesService = inject(ShoppingStoresService);
 
   store: ShoppingStore;
-  unsortedItems: Signal<ShoppingItemId[]> = computed(() => {
+  unsortedCategory: Signal<ShoppingStoreCategory> = computed(() => {
     const itemsIds = Object.keys(this.itemsService.items());
 
     // Go through the store categories and items to find the items that are not in any category
@@ -39,17 +37,25 @@ export class ShoppingListComponent {
       (category) => category.itemsIds
     );
 
-    return itemsIds.filter((itemId) => !itemsInCategories.includes(itemId));
+    return {
+      id: NULL_UUID,
+      label: 'Non triés',
+      itemsIds: itemsIds.filter(
+        (itemId) => !itemsInCategories.includes(itemId)
+      ),
+    };
   });
 
-  _categoriesLists = viewChildren<CdkDropList>('categoryList');
+  _categoriesLists =
+    viewChildren<ShoppingListCategoryComponent>('categoryList');
+  categoriesLists(): CdkDropList[] {
+    return this._categoriesLists().map((categoryList) =>
+      categoryList.dropList()
+    );
+  }
 
   constructor() {
     this.store = this.storesService.stores()[0];
-  }
-
-  categoriesLists(): CdkDropList[] {
-    return this._categoriesLists() as CdkDropList[];
   }
 
   drop(event: CdkDragDrop<ShoppingItemId[]>) {

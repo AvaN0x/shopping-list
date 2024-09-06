@@ -3,6 +3,7 @@ import { ShoppingItemsService } from './shopping-items.service';
 import { ShoppingStoresService } from './shopping-stores.service';
 import { ShoppingItems } from './shopping-items.service.modele';
 import { ShoppingStores } from './shopping-stores.service.modele';
+import { uuid } from '../utils/uuid';
 
 @Injectable({
   providedIn: 'root',
@@ -16,33 +17,35 @@ export class StorageService {
   }
 
   populate() {
-    const item1Uuid = crypto.randomUUID();
-    const item2Uuid = crypto.randomUUID();
+    const item1Uuid = uuid();
+    const item2Uuid = uuid();
     this.itemsService.populate(
       JSON.stringify([
         { id: item1Uuid, label: 'Item 1' },
         { id: item2Uuid, label: 'Item 2' },
-        { id: crypto.randomUUID(), label: 'Item 3' },
+        { id: uuid(), label: 'Item 3' },
+        { id: uuid(), label: 'Item 4' },
+        { id: uuid(), label: 'Item 5' },
       ] satisfies ShoppingItems)
     );
     this.storesService.populate(
       JSON.stringify([
         {
-          id: crypto.randomUUID(),
+          id: uuid(),
           label: 'Store 1',
           categories: [
             {
-              id: crypto.randomUUID(),
+              id: uuid(),
               label: 'Category 1',
               itemsIds: [item1Uuid],
             },
             {
-              id: crypto.randomUUID(),
+              id: uuid(),
               label: 'Category 2',
               itemsIds: [item2Uuid],
             },
             {
-              id: crypto.randomUUID(),
+              id: uuid(),
               label: 'Category 3',
               itemsIds: [],
             },

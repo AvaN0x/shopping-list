@@ -1,17 +1,7 @@
 @for (category of store.categories; track category.id) {
-<div>{{category.label}}</div>
-<div cdkDropList #categoryList="cdkDropList" [cdkDropListData]="category.itemsIds"
-  [cdkDropListConnectedTo]="categoriesLists()" class="example-list" (cdkDropListDropped)="drop($event)">
-  @for (itemId of category.itemsIds; track itemId) {
-  <app-shopping-list-item class="example-box" [itemId]="itemId" cdkDrag />
-  }
-</div>
+<app-shopping-list-category #categoryList [category]="category" [categoriesLists]="categoriesLists()"
+  (onDrop)="drop($event)" />
 }
 <hr />
-<div>Non triés</div>
-<div cdkDropList #categoryList="cdkDropList" [cdkDropListData]="unsortedItems()"
-  [cdkDropListConnectedTo]="categoriesLists()" class="example-list" (cdkDropListDropped)="drop($event)">
-  @for (itemId of unsortedItems(); track itemId) {
-  <app-shopping-list-item class="example-box" [itemId]="itemId" cdkDrag />
-  }
-</div>
+<app-shopping-list-category #categoryList [category]="unsortedCategory()" [categoriesLists]="categoriesLists()"
+  (onDrop)="drop($event)" />
