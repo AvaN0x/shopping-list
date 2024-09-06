@@ -1,0 +1,54 @@
+@use "@angular/material" as mat;
+@import "variables";
+@import "mixins";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: mat.get-theme-color($light-theme, secondary, 60);
+
+  @include if-dark-theme {
+    background: mat.get-theme-color($dark-theme, secondary, 20);
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
+  .store-selector {
+    margin-right: 0.5rem;
+  }
+}
+
+mat-drawer-container {
+  flex: 1;
+}
+
+mat-drawer {
+  width: min(300px, 80vw);
+  border-top-right-radius: 0;
+  top: var(--mat-toolbar-standard-height);
+  position: fixed;
+  flex: 1;
+  padding: 0;
+
+  border: 2px solid;
+  border-top: 0;
+  border-left: 0;
+  border-color: mat.get-theme-color($light-theme, secondary, 60);
+
+  @include if-dark-theme {
+    border-color: mat.get-theme-color($dark-theme, secondary, 20);
+  }
+
+  @media (max-width: 599px) {
+    top: var(--mat-toolbar-mobile-height);
+  }
+}

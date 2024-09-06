@@ -1,0 +1,23 @@
+<mat-toolbar>
+  <button mat-icon-button aria-label="Choisir un magasin" class="store-selector" (click)="drawer.toggle()">
+    <mat-icon>storefront</mat-icon>
+  </button>
+  <a mat-button routerLink="/" aria-label="Retourner à la liste" (click)="drawer.close()">
+    <span>Shopping List</span>
+  </a>
+  <span class="spacer"></span>
+  <a mat-icon-button routerLink="/settings" aria-label="Accéder aux paramètres" (click)="drawer.close()">
+    <mat-icon>settings</mat-icon>
+  </a>
+</mat-toolbar>
+
+<mat-drawer-container class="example-container">
+  <mat-drawer mode="over" #drawer>
+    <app-shopping-store-selector />
+  </mat-drawer>
+  <mat-drawer-content>
+    <main>
+      <ng-content />
+    </main>
+  </mat-drawer-content>
+</mat-drawer-container>

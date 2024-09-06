@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './components/layout/header/header.component';
+import { HeaderComponent } from './components/layout/layout.component';
 import { ThemeService } from './services/theme.service';
 import { StorageService } from './services/storage.service';
 

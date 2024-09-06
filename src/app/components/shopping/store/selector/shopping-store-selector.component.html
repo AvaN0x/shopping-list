@@ -1,0 +1,29 @@
+<mat-nav-list>
+  @for (store of storesService.stores(); track store.id) {
+  <mat-list-item [activated]="store.id === storesService.currentStore()?.id"
+    (click)="storesService.setCurrentStore(store.id)">
+    <span matListItemTitle>
+      {{store.label}}
+    </span>
+
+    <button mat-icon-button aria-label="Option du magasin" matListItemMeta [matMenuTriggerFor]="contextMenu"
+      (click)="$event.stopPropagation()">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #contextMenu="matMenu" class="context-menu" xPosition="before" yPosition="below">
+      <button mat-menu-item (click)="rename(store.id)">
+        <mat-icon>label</mat-icon>
+        Renommer
+      </button>
+      <button mat-menu-item (click)="duplicate(store.id)">
+        <mat-icon>content_copy</mat-icon>
+        Dupliquer
+      </button>
+      <button mat-menu-item (click)="delete(store.id)">
+        <mat-icon>delete</mat-icon>
+        Supprimer
+      </button>
+    </mat-menu>
+  </mat-list-item>
+  }
+</mat-nav-list>

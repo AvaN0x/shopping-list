@@ -16,12 +16,11 @@ import {
 import { ShoppingItemId } from '../../../services/shopping-items.service.modele';
 import { ShoppingListCategoryComponent } from './category/shopping-list-category.component';
 import { NULL_UUID } from '../../../utils/uuid';
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-shopping-list',
   standalone: true,
-  imports: [ShoppingListCategoryComponent, MatButtonModule],
+  imports: [ShoppingListCategoryComponent],
   templateUrl: './shopping-list.component.html',
   styleUrl: './shopping-list.component.scss',
 })

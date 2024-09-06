@@ -1,0 +1,26 @@
+mat-nav-list {
+  padding: 10px 4px;
+}
+
+mat-list-item {
+  margin: 2px 0;
+
+  [matlistitemtitle] {
+    height: 100%;
+    width: 100%;
+    display: block;
+  }
+}
+
+::ng-deep {
+  .context-menu {
+    background-color: red;
+    .mat-mdc-menu-content {
+      padding: 0;
+
+      button {
+        min-height: 38px;
+      }
+    }
+  }
+}
