@@ -16,11 +16,12 @@ import {
 import { ShoppingItemId } from '../../../services/shopping-items.service.modele';
 import { ShoppingListCategoryComponent } from './category/shopping-list-category.component';
 import { NULL_UUID } from '../../../utils/uuid';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-shopping-list',
   standalone: true,
-  imports: [ShoppingListCategoryComponent],
+  imports: [ShoppingListCategoryComponent, MatButtonModule],
   templateUrl: './shopping-list.component.html',
   styleUrl: './shopping-list.component.scss',
 })
@@ -28,12 +29,19 @@ export class ShoppingListComponent {
   itemsService = inject(ShoppingItemsService);
   storesService = inject(ShoppingStoresService);
 
-  store: ShoppingStore;
-  unsortedCategory: Signal<ShoppingStoreCategory> = computed(() => {
+  store = computed<ShoppingStore | undefined>(() =>
+    this.storesService.currentStore()
+  );
+  unsortedCategory: Signal<ShoppingStoreCategory | undefined> = computed(() => {
+    const store = this.store();
+    if (!store) {
+      return undefined;
+    }
+
     const itemsIds = Object.keys(this.itemsService.items());
 
     // Go through the store categories and items to find the items that are not in any category
-    const itemsInCategories = this.store.categories.flatMap(
+    const itemsInCategories = store.categories.flatMap(
       (category) => category.itemsIds
     );
 
@@ -52,10 +60,6 @@ export class ShoppingListComponent {
     return this._categoriesLists().map((categoryList) =>
       categoryList.dropList()
     );
-  }
-
-  constructor() {
-    this.store = this.storesService.stores()[0];
   }
 
   drop(event: CdkDragDrop<ShoppingItemId[]>) {

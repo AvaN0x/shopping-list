@@ -1,7 +1,18 @@
-@for (category of store.categories; track category.id) {
+@for (store of storesService.stores(); track store.id) {
+<button mat-button (click)="storesService.setCurrentStore(store.id)">{{store.label}}</button>
+}
+
+@if (store()) {
+<p>{{store()!.label}}</p>
+@for (category of store()!.categories; track category.id) {
 <app-shopping-list-category #categoryList [category]="category" [categoriesLists]="categoriesLists()"
   (onDrop)="drop($event)" />
 }
 <hr />
-<app-shopping-list-category #categoryList [category]="unsortedCategory()" [categoriesLists]="categoriesLists()"
+<app-shopping-list-category #categoryList [category]="unsortedCategory()!" [categoriesLists]="categoriesLists()"
   (onDrop)="drop($event)" />
+} @else {
+<p>
+  Aucun magasin n'est actuellement sélectionné.
+</p>
+}

@@ -51,6 +51,11 @@ export class StorageService {
             },
           ],
         },
+        {
+          id: uuid(),
+          label: 'Store 2',
+          categories: [],
+        },
       ] satisfies ShoppingStores)
     );
   }
