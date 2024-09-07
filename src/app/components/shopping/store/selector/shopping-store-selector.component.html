@@ -10,7 +10,7 @@
       (click)="$event.stopPropagation()">
       <mat-icon>more_vert</mat-icon>
     </button>
-    <mat-menu #contextMenu="matMenu" class="context-menu" xPosition="before" yPosition="below">
+    <mat-menu #contextMenu="matMenu" xPosition="before" yPosition="below">
       <button mat-menu-item (click)="rename(store.id)">
         <mat-icon>label</mat-icon>
         Renommer

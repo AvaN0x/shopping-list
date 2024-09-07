@@ -1,0 +1,29 @@
+:host {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+
+  & > * {
+    display: flex;
+    align-items: center;
+
+    padding-top: 4px;
+    padding-bottom: 4px;
+
+    &:first-child {
+      padding-left: 10px;
+    }
+    &:last-child {
+      padding-right: 10px;
+    }
+  }
+}
+
+.handle {
+  cursor: move;
+  padding-right: 8px;
+}
+
+.label {
+  flex: 1;
+}

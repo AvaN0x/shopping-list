@@ -11,16 +11,3 @@ mat-list-item {
     display: block;
   }
 }
-
-::ng-deep {
-  .context-menu {
-    background-color: red;
-    .mat-mdc-menu-content {
-      padding: 0;
-
-      button {
-        min-height: 38px;
-      }
-    }
-  }
-}

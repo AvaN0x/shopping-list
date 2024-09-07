@@ -3,3 +3,11 @@
   margin: 0 auto;
   padding: 0 10px;
 }
+
+.mat-mdc-menu-content {
+  padding: 0 !important;
+
+  button {
+    min-height: 38px;
+  }
+}

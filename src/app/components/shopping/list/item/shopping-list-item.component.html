@@ -1,1 +1,32 @@
-<div>{{ itemData() | json }}</div>
+<div class="handle" cdkDragHandle>
+  <mat-icon>drag_handle</mat-icon>
+</div>
+
+<div class="label">
+  {{ itemData()?.label ?? itemId }}
+</div>
+
+<div>
+  <button mat-icon-button aria-label="Option de l'élément" matListItemMeta [matMenuTriggerFor]="contextMenu"
+    (click)="$event.stopPropagation()">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #contextMenu="matMenu" class="context-menu" xPosition="before" yPosition="below">
+    <button mat-menu-item (click)="rename()">
+      <mat-icon>label</mat-icon>
+      Renommer
+    </button>
+    <button mat-menu-item (click)="increment()">
+      <mat-icon>add_shopping_cart</mat-icon>
+      Ajouter
+    </button>
+    <button mat-menu-item (click)="decrement()">
+      <mat-icon>remove_shopping_cart</mat-icon>
+      Enlever
+    </button>
+    <button mat-menu-item (click)="unlist()">
+      <mat-icon>delete</mat-icon>
+      Supprimer
+    </button>
+  </mat-menu>
+</div>
