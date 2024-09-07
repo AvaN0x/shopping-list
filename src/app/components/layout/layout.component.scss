@@ -18,10 +18,6 @@ mat-toolbar {
     background: mat.get-theme-color($dark-theme, secondary, 20);
   }
 
-  .spacer {
-    flex: 1;
-  }
-
   .store-selector {
     margin-right: 0.5rem;
   }

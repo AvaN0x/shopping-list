@@ -2,22 +2,17 @@
   <mat-icon>drag_handle</mat-icon>
 </div>
 
-
 <div class="item">
   <div class="item-label">
     {{ itemData()?.label ?? itemId }}
   </div>
 
   <div class="item-context">
-    <button mat-icon-button aria-label="Option de l'élément" matListItemMeta [matMenuTriggerFor]="contextMenu"
-      (click)="$event.stopPropagation()">
-      <mat-icon>more_vert</mat-icon>
+    <button mat-icon-button aria-label="Option de l'élément" [matMenuTriggerFor]="contextMenu"
+      class="item-context-trigger" (click)="$event.stopPropagation()">
+      <mat-icon inline>more_vert</mat-icon>
     </button>
     <mat-menu #contextMenu="matMenu" class="context-menu" xPosition="before" yPosition="below">
-      <button mat-menu-item (click)="rename()">
-        <mat-icon>label</mat-icon>
-        Renommer
-      </button>
       <button mat-menu-item (click)="increment()">
         <mat-icon>add_shopping_cart</mat-icon>
         Ajouter
@@ -26,7 +21,11 @@
         <mat-icon>remove_shopping_cart</mat-icon>
         Enlever
       </button>
-      <button mat-menu-item (click)="unlist()">
+      <button mat-menu-item (click)="rename()">
+        <mat-icon>label</mat-icon>
+        Renommer
+      </button>
+      <button mat-menu-item (click)="remove()">
         <mat-icon>delete</mat-icon>
         Supprimer
       </button>

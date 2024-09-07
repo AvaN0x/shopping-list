@@ -40,7 +40,7 @@ export class ShoppingListItemComponent {
   decrement() {
     console.log('decrement', this.itemData()?.id);
   }
-  unlist() {
-    console.log('unlist', this.itemData()?.id);
+  remove() {
+    console.log('remove', this.itemData()?.id);
   }
 }

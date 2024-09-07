@@ -37,19 +37,19 @@ export class ShoppingListComponent {
       return undefined;
     }
 
-    const itemsIds = Object.keys(this.itemsService.items());
-
     // Go through the store categories and items to find the items that are not in any category
+    const allItemsIds = Object.keys(this.itemsService.items());
     const itemsInCategories = store.categories.flatMap(
       (category) => category.itemsIds
+    );
+    const itemsIds = allItemsIds.filter(
+      (itemId) => !itemsInCategories.includes(itemId)
     );
 
     return {
       id: NULL_UUID,
       label: 'Non triés',
-      itemsIds: itemsIds.filter(
-        (itemId) => !itemsInCategories.includes(itemId)
-      ),
+      itemsIds,
     };
   });
 
