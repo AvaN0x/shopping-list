@@ -1,18 +1,9 @@
-.example-list {
-  border: solid 1px red;
-  min-height: 40px;
-  background: #0005;
-}
+.category-list {
+  border: solid 1px green;
+  min-height: var(--shopping-list-item-min-height);
 
-.example-box {
-  border-bottom: 1px solid red;
-  display: flex;
-  box-sizing: border-box;
-  background: #fff1;
-  font-size: 14px;
-
-  &:last-child {
-    border: none;
+  &.cdk-drop-list-dragging .cdx-drag:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }
 }
 
@@ -26,9 +17,5 @@
 }
 
 .cdk-drag-animating {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }

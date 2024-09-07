@@ -1,7 +1,7 @@
 <div>{{category.label}}</div>
 <div cdkDropList #dropList="cdkDropList" [cdkDropListData]="category.itemsIds"
-  [cdkDropListConnectedTo]="categoriesLists" class="example-list" (cdkDropListDropped)="drop($event)">
+  [cdkDropListConnectedTo]="categoriesLists" class="category-list" (cdkDropListDropped)="drop($event)">
   @for (itemId of category.itemsIds; track itemId) {
-  <app-shopping-list-item class="example-box" [itemId]="itemId" cdkDrag />
+  <app-shopping-list-item [itemId]="itemId" cdkDrag />
   }
 </div>
