@@ -13,7 +13,11 @@ export class StorageService {
   storesService = inject(ShoppingStoresService);
 
   constructor() {
+try {
     this.populate();
+} catch (error) {
+      console.error('Error while populating the storage', error);
+    }
   }
 
   populate() {

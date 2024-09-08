@@ -9,6 +9,8 @@ import { CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { LongPressDirective } from '../../../../directives/long-press.directive';
+import { HorizontalPanDirective } from '../../../../directives/horizontal-pan.directive';
 
 @Component({
   selector: 'app-shopping-list-item',
@@ -19,6 +21,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatMenuModule,
     MatButtonModule,
+    LongPressDirective,
+    HorizontalPanDirective,
   ],
   templateUrl: './shopping-list-item.component.html',
   styleUrl: './shopping-list-item.component.scss',
@@ -31,14 +35,19 @@ export class ShoppingListItemComponent {
     () => this.itemsService.items()[this.itemId]
   );
 
-  rename() {
-    console.log('rename', this.itemData()?.id);
+  openMenu() {
+    console.log('------------------------openMenu item');
+    // TODO
   }
+
   increment() {
     console.log('increment', this.itemData()?.id);
   }
   decrement() {
     console.log('decrement', this.itemData()?.id);
+  }
+  rename() {
+    console.log('rename', this.itemData()?.id);
   }
   remove() {
     console.log('remove', this.itemData()?.id);

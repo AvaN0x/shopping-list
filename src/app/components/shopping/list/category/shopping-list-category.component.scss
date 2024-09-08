@@ -83,3 +83,11 @@ mat-expansion-panel-header {
     }
   }
 }
+
+::ng-deep {
+  mat-expansion-panel-header.holding {
+    background-color: var(
+      --mat-expansion-header-hover-state-layer-color
+    ) !important;
+  }
+}

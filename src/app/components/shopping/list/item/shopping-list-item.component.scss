@@ -39,7 +39,8 @@
 .handle {
   cursor: grab;
   z-index: 2;
-  padding: 4px 0 4px 10px;
+  font-size: 14px;
+  padding: 4px 4px 4px 10px;
   display: flex;
   align-items: center;
 }

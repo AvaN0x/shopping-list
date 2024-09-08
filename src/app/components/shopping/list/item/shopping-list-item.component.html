@@ -1,8 +1,9 @@
 <div class="handle" cdkDragHandle>
-  <mat-icon>drag_handle</mat-icon>
+  <mat-icon inline>drag_handle</mat-icon>
 </div>
 
-<div class="item">
+<div class="item" appLongPress (longPress)="openMenu()" appHorizontalPan (horizontalPanLeft)="decrement()"
+  (horizontalPanRight)="increment()">
   <div class="item-label">
     {{ itemData()?.label ?? itemId }}
   </div>

@@ -15,11 +15,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { NULL_UUID } from '../../../../utils/uuid';
+import { LongPressDirective } from '../../../../directives/long-press.directive';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-shopping-list-category',
   standalone: true,
   imports: [
+    JsonPipe,
     ShoppingListItemComponent,
     CdkDropList,
     CdkDrag,
@@ -27,6 +30,7 @@ import { NULL_UUID } from '../../../../utils/uuid';
     MatIconModule,
     MatMenuModule,
     MatButtonModule,
+    LongPressDirective,
   ],
   templateUrl: './shopping-list-category.component.html',
   styleUrl: './shopping-list-category.component.scss',
@@ -54,6 +58,12 @@ export class ShoppingListCategoryComponent {
   }
   cdkDropListExited() {
     console.log('cdkDropListExited');
+  }
+
+  openMenu() {
+    if (this.isNullUUID()) return;
+    console.log('------------------------openMenu');
+    // TODO
   }
 
   add() {

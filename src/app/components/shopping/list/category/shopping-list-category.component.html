@@ -1,6 +1,6 @@
 <mat-accordion>
   <mat-expansion-panel expanded hideToggle (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
-    <mat-expansion-panel-header>
+    <mat-expansion-panel-header appLongPress (longPress)="openMenu()">
       <mat-panel-title>
         <mat-icon class="open-state-indicator"
           [style.transform]="panelOpenState() ? 'rotate(90deg)' : ''">keyboard_arrow_right</mat-icon>
@@ -18,7 +18,7 @@
             <mat-icon inline>settings</mat-icon>
           </button>
           <mat-menu #contextMenu="matMenu" class="context-menu" xPosition="before" yPosition="below">
-            <button mat-menu-item (click)="rename()">
+            <button mat-menu-item (click)="rename();">
               <mat-icon>label</mat-icon>
               Renommer
             </button>
