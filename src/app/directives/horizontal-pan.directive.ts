@@ -6,10 +6,16 @@ import { computed, Directive, Input, output, signal } from '@angular/core';
   standalone: true,
   host: {
     '(pointerdown)': 'pointerdown($event)',
+
     '(pointerup)': 'pointerup($event)',
+    // For some reason pointerup is not triggered
+    '(mouseup)': 'mouseup($event)',
+    '(touchup)': 'touchup($event)',
+
     '(pointercancel)': 'pointercancel($event)',
     '(pointerout)': 'pointerout($event)',
     '(pointerleave)': 'pointerleave($event)',
+
     '(pointermove)': 'pointermove($event)',
 
     '[class.panning]': 'panning()',
@@ -19,8 +25,8 @@ import { computed, Directive, Input, output, signal } from '@angular/core';
 })
 export class HorizontalPanDirective {
   @Input() horizontalPanHorizontalMinThreshold: number = 50;
-  horizontalPanRight = output<PointerEvent>();
-  horizontalPanLeft = output<PointerEvent>();
+  horizontalPanRight = output<PointerEvent | MouseEvent | TouchEvent>();
+  horizontalPanLeft = output<PointerEvent | MouseEvent | TouchEvent>();
 
   private panPointerId = signal<number | undefined>(undefined);
   private startMouseX = signal<number>(0);
@@ -34,9 +40,17 @@ export class HorizontalPanDirective {
   pointerdown(event: PointerEvent) {
     this.startPan(event);
   }
+
   pointerup(event: PointerEvent) {
     this.endPan(event);
   }
+  mouseup(event: MouseEvent) {
+    this.endPan(event);
+  }
+  touchup(event: TouchEvent) {
+    this.endPan(event);
+  }
+
   pointercancel(event: PointerEvent) {
     this.endPan(event);
   }
@@ -46,6 +60,7 @@ export class HorizontalPanDirective {
   pointerleave(event: PointerEvent) {
     this.endPan(event);
   }
+
   pointermove(event: PointerEvent) {
     this.move(event);
   }
@@ -56,10 +71,6 @@ export class HorizontalPanDirective {
     }
   }
   startPan(event: PointerEvent) {
-    if (this.panPointerId) {
-      clearTimeout(this.panPointerId());
-    }
-
     // Save start position mouse/touch position
     this.startMouseX.set(event.clientX);
     this.currentMouseX.set(event.clientX);
@@ -67,7 +78,7 @@ export class HorizontalPanDirective {
     this.panPointerId.set(event.pointerId);
   }
 
-  endPan(event: PointerEvent) {
+  endPan(event: PointerEvent | MouseEvent | TouchEvent) {
     if (this.panPointerId()) {
       event.preventDefault();
       event.stopPropagation();
