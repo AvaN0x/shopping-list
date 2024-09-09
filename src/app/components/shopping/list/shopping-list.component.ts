@@ -38,13 +38,17 @@ export class ShoppingListComponent {
     }
 
     // Go through the store categories and items to find the items that are not in any category
-    const allItemsIds = Object.keys(this.itemsService.items());
+    const allItems = Object.values(this.itemsService.items());
     const itemsInCategories = store.categories.flatMap(
       (category) => category.itemsIds
     );
-    const itemsIds = allItemsIds.filter(
-      (itemId) => !itemsInCategories.includes(itemId)
-    );
+    const itemsIds = allItems
+      // Get the items that are not in any category
+      .filter((item) => !itemsInCategories.includes(item.id))
+      // Sort the items by their label
+      .sort((a, b) => a.label.localeCompare(b.label))
+      // Keep only the ids
+      .map((item) => item.id);
 
     return {
       id: NULL_UUID,

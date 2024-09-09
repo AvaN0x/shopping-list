@@ -18,6 +18,17 @@
     border: none;
   }
 
+  &.no-quantity {
+    opacity: 0.7;
+
+    & .item {
+      &-label {
+        text-decoration-line: line-through;
+        user-select: none;
+      }
+    }
+  }
+
   &.cdk-drag-preview {
     box-sizing: border-box;
     background-color: mat.get-theme-color($light-theme, secondary, 95);
@@ -55,6 +66,10 @@
   gap: 4px;
   font-size: 14px;
 
+  &-quantity {
+    font-size: 12px;
+    user-select: none;
+  }
   &-label {
     flex: 1;
   }

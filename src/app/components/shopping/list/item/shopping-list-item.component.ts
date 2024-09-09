@@ -26,6 +26,9 @@ import { HorizontalPanDirective } from '../../../../directives/horizontal-pan.di
   ],
   templateUrl: './shopping-list-item.component.html',
   styleUrl: './shopping-list-item.component.scss',
+  host: {
+    '[class.no-quantity]': 'itemData()?.quantity <= 0',
+  },
 })
 export class ShoppingListItemComponent {
   itemsService = inject(ShoppingItemsService);
@@ -34,6 +37,16 @@ export class ShoppingListItemComponent {
   itemData: Signal<ShoppingItem | undefined> = computed(
     () => this.itemsService.items()[this.itemId]
   );
+  updateItem(item: ShoppingItem) {
+    const itemData = this.itemData();
+    if (!itemData || itemData.id !== item.id) {
+      throw new Error(`Item with id ${item.id} is not the current item`);
+    }
+    this.itemsService.items.update((items) => {
+      items[item.id] = { ...item };
+      return { ...items };
+    });
+  }
 
   openMenu() {
     console.log('------------------------openMenu item');
@@ -41,10 +54,21 @@ export class ShoppingListItemComponent {
   }
 
   increment() {
-    console.log('increment', this.itemData()?.id);
+    const itemData = this.itemData();
+    if (!itemData) {
+      return;
+    }
+    this.updateItem({ ...itemData, quantity: itemData.quantity + 1 });
   }
   decrement() {
-    console.log('decrement', this.itemData()?.id);
+    const itemData = this.itemData();
+    if (!itemData || itemData.quantity <= 0) {
+      return;
+    }
+    this.updateItem({
+      ...itemData,
+      quantity: itemData.quantity - 1,
+    });
   }
   rename() {
     console.log('rename', this.itemData()?.id);

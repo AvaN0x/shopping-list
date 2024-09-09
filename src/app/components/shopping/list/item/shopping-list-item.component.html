@@ -5,7 +5,9 @@
 <div class="item" appLongPress (longPress)="openMenu()" appHorizontalPan (horizontalPanLeft)="decrement()"
   (horizontalPanRight)="increment()">
   <div class="item-label">
-    {{ itemData()?.label ?? itemId }}
+    @if ((itemData()?.quantity ?? 0) > 1) {
+    <span class="item-quantity">x{{ itemData()?.quantity }} </span>
+    }{{ itemData()?.label ?? itemId }}
   </div>
 
   <div class="item-context">

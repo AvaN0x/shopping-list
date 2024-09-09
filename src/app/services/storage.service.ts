@@ -13,9 +13,9 @@ export class StorageService {
   storesService = inject(ShoppingStoresService);
 
   constructor() {
-try {
-    this.populate();
-} catch (error) {
+    try {
+      this.populate();
+    } catch (error) {
       console.error('Error while populating the storage', error);
     }
   }
@@ -25,11 +25,11 @@ try {
     const item2Uuid = uuid();
     this.itemsService.populate(
       JSON.stringify([
-        { id: item1Uuid, label: 'Item 1' },
-        { id: item2Uuid, label: 'Item 2' },
-        { id: uuid(), label: 'Item 3' },
-        { id: uuid(), label: 'Item 4' },
-        { id: uuid(), label: 'Item 5' },
+        { id: item1Uuid, label: 'Item 1', quantity: 2 },
+        { id: item2Uuid, label: 'Item 2', quantity: 0 },
+        { id: uuid(), label: 'Item 3', quantity: 1 },
+        { id: uuid(), label: 'Item 4', quantity: 0 },
+        { id: uuid(), label: 'Item 5', quantity: 0 },
       ] satisfies ShoppingItems)
     );
     this.storesService.populate(

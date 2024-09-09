@@ -6,6 +6,7 @@ export type ShoppingItemId = z.infer<typeof ShoppingItemIdSchema>;
 export const ShoppingItemSchema = z.object({
   id: ShoppingItemIdSchema,
   label: z.string().min(0).max(255),
+  quantity: z.number().int().min(0),
 });
 export type ShoppingItem = z.infer<typeof ShoppingItemSchema>;
 
