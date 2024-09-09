@@ -76,5 +76,12 @@ export class ShoppingListComponent {
         event.currentIndex
       );
     }
+
+    // The stores array are correctly updated from moveItemInArray and transferArrayItem functions
+    // but they do not trigger a reload of the signal, we update it manually
+    const store = this.store();
+    if (store) {
+      this.storesService.updateCurrentStore(store);
+    }
   }
 }

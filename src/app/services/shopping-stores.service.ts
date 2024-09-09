@@ -24,6 +24,16 @@ export class ShoppingStoresService implements Storageable {
     }
     this.currentStoreIndex.update(() => index);
   }
+  updateCurrentStore(store: ShoppingStore) {
+    const currentStore = this.currentStore();
+    if (!currentStore || currentStore.id !== store.id) {
+      throw new Error(`Store with id ${store.id} is not the current store`);
+    }
+    this.stores.update((stores) => {
+      stores[this.currentStoreIndex()] = { ...store };
+      return [...stores];
+    });
+  }
 
   populate(data: string): void {
     const stores = ShoppingStoresSchema.parse(JSON.parse(data));

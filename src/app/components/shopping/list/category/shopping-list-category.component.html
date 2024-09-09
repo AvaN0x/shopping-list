@@ -33,8 +33,9 @@
     </mat-expansion-panel-header>
 
     <div cdkDropList #dropList="cdkDropList" [cdkDropListData]="category.itemsIds"
-      [cdkDropListConnectedTo]="categoriesLists" class="category-list" (cdkDropListEntered)="hoveringDropList.set(true)"
-      (cdkDropListExited)="hoveringDropList.set(false)" (cdkDropListDropped)="drop($event)">
+      [cdkDropListConnectedTo]="categoriesLists" class="category-list" [cdkDropListSortingDisabled]="isNullUUID()"
+      (cdkDropListEntered)="hoveringDropList.set(true)" (cdkDropListExited)="hoveringDropList.set(false)"
+      (cdkDropListDropped)="drop($event)">
       @if (category.itemsIds.length > 0 || hoveringDropList()) {
       @for (itemId of category.itemsIds; track itemId) {
       <app-shopping-list-item [itemId]="itemId" cdkDrag />
