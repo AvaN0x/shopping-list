@@ -36,34 +36,21 @@ export class LongPressDirective {
   );
 
   pointerdown(event: PointerEvent) {
-    // console.log('###########################################################');
-    // console.log('pointerdown', event.pointerId);
-
     this.startTimer(event);
   }
   pointerup(event: PointerEvent) {
-    // console.log('pointerup', event.pointerId);
-
     this.endTimer(event);
   }
   pointercancel(event: PointerEvent) {
-    // console.log('pointercancel', event.pointerId);
-
     this.endTimer(event);
   }
   pointerout(event: PointerEvent) {
-    // console.log('pointerout', event.pointerId);
-
     this.endTimer(event);
   }
   pointerleave(event: PointerEvent) {
-    // console.log('pointerleave', event.pointerId);
-
     this.endTimer(event);
   }
   pointermove(event: PointerEvent) {
-    // console.log('pointermove', event.pointerId);
-
     this.move(event);
   }
 

@@ -2,9 +2,12 @@ import {
   Component,
   computed,
   Directive,
+  HostListener,
   inject,
   InjectionToken,
   Input,
+  OnDestroy,
+  OnInit,
   output,
   signal,
 } from '@angular/core';
@@ -22,30 +25,32 @@ export const HORIZONTAL_PAN_COMPONENT =
   host: {
     '(pointerdown)': 'pointerdown($event)',
 
-    '(pointerup)': 'pointerup($event)',
+    '(document:pointerup)': 'pointerup($event)',
     // For some reason pointerup is not triggered
-    '(mouseup)': 'mouseup($event)',
-    '(touchup)': 'touchup($event)',
+    '(document:mouseup)': 'mouseup($event)',
+    '(document:touchend)': 'touchend($event)',
 
     '(pointercancel)': 'pointercancel($event)',
-    '(pointerout)': 'pointerout($event)',
-    '(pointerleave)': 'pointerleave($event)',
+    // '(pointerout)': 'pointerout($event)',
+    // '(pointerleave)': 'pointerleave($event)',
 
-    '(pointermove)': 'pointermove($event)',
+    '(document:pointermove)': 'pointermove($event)',
+    '(document:touchmove)': 'touchmove($event)',
 
     '[class.panning]': 'panning()',
   },
 })
 export class HorizontalPanComponent {
+  // TODO: Issue on vertical scroll mobile
+
   @Input() horizontalPanHorizontalMinThreshold: number = 50;
   horizontalPanRight = output<PointerEvent | MouseEvent | TouchEvent>();
   horizontalPanLeft = output<PointerEvent | MouseEvent | TouchEvent>();
 
-  private panPointerId = signal<number | undefined>(undefined);
+  panning = signal<boolean>(false);
   private startMouseX = signal<number>(0);
   private currentMouseX = signal<number>(0);
 
-  panning = computed<boolean>(() => this.panPointerId() !== undefined);
   horizontalDiff = computed<number>(
     () => this.currentMouseX() - this.startMouseX()
   );
@@ -63,40 +68,47 @@ export class HorizontalPanComponent {
   mouseup(event: MouseEvent) {
     this.endPan(event);
   }
-  touchup(event: TouchEvent) {
+  touchend(event: TouchEvent) {
     this.endPan(event);
   }
 
   pointercancel(event: PointerEvent) {
     this.endPan(event);
   }
-  pointerout(event: PointerEvent) {
-    this.endPan(event);
-  }
-  pointerleave(event: PointerEvent) {
-    this.endPan(event);
-  }
+  // pointerout(event: PointerEvent) {
+  //   this.endPan(event);
+  // }
+  // pointerleave(event: PointerEvent) {
+  //   this.endPan(event);
+  // }
 
   pointermove(event: PointerEvent) {
     this.move(event);
   }
+  touchmove(event: TouchEvent) {
+    this.move(event);
+  }
 
-  move(event: PointerEvent) {
-    if (this.panPointerId()) {
-      this.currentMouseX.set(event.clientX);
+  startPan(event: PointerEvent | MouseEvent | TouchEvent) {
+    // Save start position mouse/touch position
+    this.startMouseX.set(
+      'clientX' in event ? event.clientX : event.touches?.[0].clientX
+    );
+    this.currentMouseX.set(
+      'clientX' in event ? event.clientX : event.touches?.[0].clientX
+    );
+
+    this.panning.set(true);
+  }
+  move(event: PointerEvent | MouseEvent | TouchEvent) {
+    if (this.panning()) {
+      this.currentMouseX.set(
+        'clientX' in event ? event.clientX : event.touches?.[0].clientX
+      );
     }
   }
-  startPan(event: PointerEvent) {
-    // Save start position mouse/touch position
-    this.startMouseX.set(event.clientX);
-    this.currentMouseX.set(event.clientX);
-
-    this.panPointerId.set(event.pointerId);
-  }
-
   endPan(event: PointerEvent | MouseEvent | TouchEvent) {
-    if (this.panPointerId()) {
-      event.preventDefault();
+    if (this.panning()) {
       event.stopPropagation();
       event.stopImmediatePropagation();
 
@@ -111,7 +123,7 @@ export class HorizontalPanComponent {
         }
       }
 
-      this.panPointerId.set(undefined);
+      this.panning.set(false);
       this.startMouseX.set(0);
       this.currentMouseX.set(0);
     }
