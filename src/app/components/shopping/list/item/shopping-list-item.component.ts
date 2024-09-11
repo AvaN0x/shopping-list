@@ -31,6 +31,8 @@ import { HorizontalPanDirective } from '../../../../directives/horizontal-pan.di
   },
 })
 export class ShoppingListItemComponent {
+  // Temporary solution
+  Math = Math;
   itemsService = inject(ShoppingItemsService);
 
   @Input({ required: true }) itemId!: ShoppingItemId;

@@ -100,7 +100,6 @@ export class LongPressDirective {
 
   endTimer(event: MouseEvent) {
     if (this.timer()) {
-      event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
 

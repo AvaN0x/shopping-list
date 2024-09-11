@@ -84,16 +84,13 @@ export class HorizontalPanDirective {
       event.stopPropagation();
       event.stopImmediatePropagation();
 
-      console.log('directional', this.horizontalDiff());
       if (
         Math.abs(this.horizontalDiff()) >
         this.horizontalPanHorizontalMinThreshold
       ) {
         if (this.horizontalDiff() > 0) {
-          console.log('right');
           this.horizontalPanRight.emit(event);
         } else {
-          console.log('left');
           this.horizontalPanLeft.emit(event);
         }
       }
