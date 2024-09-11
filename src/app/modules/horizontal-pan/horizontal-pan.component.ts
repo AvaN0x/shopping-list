@@ -1,9 +1,24 @@
-import { computed, Directive, Input, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  Directive,
+  inject,
+  InjectionToken,
+  Input,
+  output,
+  signal,
+} from '@angular/core';
 
-@Directive({
-  selector: '[appHorizontalPan]',
-  exportAs: 'appHorizontalPan',
-  standalone: true,
+export const HORIZONTAL_PAN_COMPONENT =
+  new InjectionToken<HorizontalPanComponent>('HorizontalPanComponent');
+
+@Component({
+  selector: 'app-horizontal-pan, [appHorizontalPan]',
+  templateUrl: './horizontal-pan.component.html',
+  styleUrl: './horizontal-pan.component.scss',
+  providers: [
+    { provide: HORIZONTAL_PAN_COMPONENT, useExisting: HorizontalPanComponent },
+  ],
   host: {
     '(pointerdown)': 'pointerdown($event)',
 
@@ -19,11 +34,9 @@ import { computed, Directive, Input, output, signal } from '@angular/core';
     '(pointermove)': 'pointermove($event)',
 
     '[class.panning]': 'panning()',
-
-    '[style.touch-action]': '"pan-y"',
   },
 })
-export class HorizontalPanDirective {
+export class HorizontalPanComponent {
   @Input() horizontalPanHorizontalMinThreshold: number = 50;
   horizontalPanRight = output<PointerEvent | MouseEvent | TouchEvent>();
   horizontalPanLeft = output<PointerEvent | MouseEvent | TouchEvent>();
@@ -35,6 +48,9 @@ export class HorizontalPanDirective {
   panning = computed<boolean>(() => this.panPointerId() !== undefined);
   horizontalDiff = computed<number>(
     () => this.currentMouseX() - this.startMouseX()
+  );
+  horizontalActionsWidth = computed<number>(
+    () => this.horizontalPanHorizontalMinThreshold * 1.2
   );
 
   pointerdown(event: PointerEvent) {

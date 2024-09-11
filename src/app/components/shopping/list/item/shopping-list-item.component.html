@@ -1,9 +1,12 @@
-<div class="item-wrapper" appHorizontalPan #pan="appHorizontalPan" (horizontalPanLeft)="decrement()"
-  (horizontalPanRight)="increment()">
-  <div class="item"
-    [style.left.px]="Math.min(pan.horizontalPanHorizontalMinThreshold * 0.8, Math.max(pan.horizontalPanHorizontalMinThreshold * -0.8, pan.horizontalDiff()))"
-    [style.position]="'relative'">
+<app-horizontal-pan class="item-wrapper" (horizontalPanLeft)="decrement()" (horizontalPanRight)="increment()">
+  <app-horizontal-pan-action-left aria-label="Ajouter">
+    <mat-icon>add_shopping_cart</mat-icon>
+  </app-horizontal-pan-action-left>
+  <app-horizontal-pan-action-right aria-label="Enlever">
+    <mat-icon>remove_shopping_cart</mat-icon>
+  </app-horizontal-pan-action-right>
 
+  <app-horizontal-pan-item class="item">
     <div class="item-handle" cdkDragHandle>
       <mat-icon inline>drag_handle</mat-icon>
     </div>
@@ -40,5 +43,5 @@
         </mat-menu>
       </div>
     </div>
-  </div>
-</div>
+  </app-horizontal-pan-item>
+</app-horizontal-pan>

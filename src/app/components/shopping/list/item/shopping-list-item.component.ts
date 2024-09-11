@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { LongPressDirective } from '../../../../directives/long-press.directive';
-import { HorizontalPanDirective } from '../../../../directives/horizontal-pan.directive';
+import { HorizontalPanModule } from '../../../../modules/horizontal-pan/horizontal-pan.module';
 
 @Component({
   selector: 'app-shopping-list-item',
@@ -22,7 +22,7 @@ import { HorizontalPanDirective } from '../../../../directives/horizontal-pan.di
     MatMenuModule,
     MatButtonModule,
     LongPressDirective,
-    HorizontalPanDirective,
+    HorizontalPanModule,
   ],
   templateUrl: './shopping-list-item.component.html',
   styleUrl: './shopping-list-item.component.scss',
@@ -31,8 +31,6 @@ import { HorizontalPanDirective } from '../../../../directives/horizontal-pan.di
   },
 })
 export class ShoppingListItemComponent {
-  // Temporary solution
-  Math = Math;
   itemsService = inject(ShoppingItemsService);
 
   @Input({ required: true }) itemId!: ShoppingItemId;

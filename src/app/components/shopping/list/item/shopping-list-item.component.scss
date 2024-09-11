@@ -4,9 +4,11 @@
 
 :host {
   &.no-quantity {
-    opacity: 0.7;
-
     & .item {
+      & > * {
+        opacity: 0.7;
+      }
+
       &-label {
         text-decoration-line: line-through;
       }
@@ -37,6 +39,10 @@
       border-color: $color;
     }
 
+    app-horizontal-pan-action-left,
+    app-horizontal-pan-action-right {
+      visibility: hidden;
+    }
     & .item {
       &-context {
         visibility: hidden;
@@ -45,12 +51,26 @@
   }
 }
 
+app-horizontal-pan-action-left {
+  background-color: rgb(133, 214, 112);
+
+  @include if-dark-theme {
+    background-color: rgb(90, 159, 73);
+  }
+}
+
+app-horizontal-pan-action-right {
+  background-color: #f04a55;
+
+  @include if-dark-theme {
+    background-color: #991e26;
+  }
+}
+
 .item {
   display: flex;
   align-items: stretch;
   gap: 4px;
-  user-select: none;
-  transition: left 250ms cubic-bezier(0, 0, 0.2, 1);
 
   &-handle {
     cursor: grab;
