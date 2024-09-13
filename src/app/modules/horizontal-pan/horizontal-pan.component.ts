@@ -41,9 +41,15 @@ export const HORIZONTAL_PAN_COMPONENT =
   },
 })
 export class HorizontalPanComponent {
-  // TODO: Issue on vertical scroll mobile
+  /**
+   * The distance needed to be able to trigger the action
+   */
+  @Input() horizontalPanActionThreshold: number = 50;
+  /**
+   * The distance needed before the pan horizontal diff is considered
+   */
+  @Input() horizontalPanDeductedDistance: number = 20;
 
-  @Input() horizontalPanHorizontalMinThreshold: number = 50;
   horizontalPanRight = output<PointerEvent | MouseEvent | TouchEvent>();
   horizontalPanLeft = output<PointerEvent | MouseEvent | TouchEvent>();
 
@@ -51,11 +57,25 @@ export class HorizontalPanComponent {
   private startMouseX = signal<number>(0);
   private currentMouseX = signal<number>(0);
 
-  horizontalDiff = computed<number>(
-    () => this.currentMouseX() - this.startMouseX()
-  );
+  horizontalDiff = computed<number>(() => {
+    // Get the difference between the start and current mouse position
+    const diff = this.currentMouseX() - this.startMouseX();
+    // Get the multiplier to restore the original direction
+    const negativeMultiplier = diff > 0 ? 1 : -1;
+    // Return the absolute difference minus the deducted distance
+    return (
+      Math.max(0, Math.abs(diff) - this.horizontalPanDeductedDistance) *
+      negativeMultiplier
+    );
+  });
   horizontalActionsWidth = computed<number>(
-    () => this.horizontalPanHorizontalMinThreshold * 1.2
+    () => this.horizontalPanActionThreshold * 1.2
+  );
+  canLeftActionBeTriggered = computed<boolean>(
+    () => this.horizontalDiff() >= this.horizontalPanActionThreshold
+  );
+  canRightActionBeTriggered = computed<boolean>(
+    () => this.horizontalDiff() <= -this.horizontalPanActionThreshold
   );
 
   pointerdown(event: PointerEvent) {
@@ -112,15 +132,10 @@ export class HorizontalPanComponent {
       event.stopPropagation();
       event.stopImmediatePropagation();
 
-      if (
-        Math.abs(this.horizontalDiff()) >
-        this.horizontalPanHorizontalMinThreshold
-      ) {
-        if (this.horizontalDiff() > 0) {
-          this.horizontalPanRight.emit(event);
-        } else {
-          this.horizontalPanLeft.emit(event);
-        }
+      if (this.canLeftActionBeTriggered()) {
+        this.horizontalPanLeft.emit(event);
+      } else if (this.canRightActionBeTriggered()) {
+        this.horizontalPanRight.emit(event);
       }
 
       this.panning.set(false);

@@ -51,6 +51,15 @@
   }
 }
 
+app-horizontal-pan-action-left,
+app-horizontal-pan-action-right {
+  opacity: 0.7;
+  transition: opacity 0.2s;
+
+  &.triggerable {
+    opacity: 1;
+  }
+}
 app-horizontal-pan-action-left {
   background-color: rgb(133, 214, 112);
 
