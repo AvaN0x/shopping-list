@@ -11,16 +11,23 @@
       <mat-icon inline>drag_handle</mat-icon>
     </div>
 
-    <div class="item-content" appLongPress (longPress)="openMenu()">
+    <div class="item-content" appLongPress (longPress)="startEdit()">
+      @if (editMode() && editLabel()) {
+      <div class="item-edit">
+        <app-seamless-input-text [defaultValue]="editLabel()" (valueChanged)="editLabelChange($event)"
+          (blur)="stopEdit()" />
+      </div>
+      } @else {
       <div class="item-label">
         @if ((itemData()?.quantity ?? 0) > 1) {
         <span class="item-quantity">x{{ itemData()?.quantity }} </span>
         }{{ itemData()?.label ?? itemId }}
       </div>
+      }
 
-      <div class="item-context">
+      <div class="item-actions">
         <button mat-icon-button aria-label="Option de l'élément" [matMenuTriggerFor]="contextMenu"
-          class="item-context-trigger" (click)="$event.stopPropagation()">
+          class="item-actions-trigger" (click)="$event.stopPropagation()">
           <mat-icon inline>more_vert</mat-icon>
         </button>
         <mat-menu #contextMenu="matMenu" class="context-menu" xPosition="before" yPosition="below">

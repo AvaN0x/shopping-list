@@ -1,4 +1,11 @@
-import { Component, computed, inject, Input, Signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  Input,
+  signal,
+  Signal,
+} from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import {
   ShoppingItem,
@@ -11,6 +18,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { LongPressDirective } from '../../../../directives/long-press.directive';
 import { HorizontalPanModule } from '../../../../modules/horizontal-pan/horizontal-pan.module';
+import { SeamlessInputTextComponent } from '../../../seamless-input-text/seamless-input-text.component';
 
 @Component({
   selector: 'app-shopping-list-item',
@@ -23,6 +31,7 @@ import { HorizontalPanModule } from '../../../../modules/horizontal-pan/horizont
     MatButtonModule,
     LongPressDirective,
     HorizontalPanModule,
+    SeamlessInputTextComponent,
   ],
   templateUrl: './shopping-list-item.component.html',
   styleUrl: './shopping-list-item.component.scss',
@@ -48,11 +57,41 @@ export class ShoppingListItemComponent {
     });
   }
 
-  openMenu() {
-    console.log('------------------------openMenu item');
-    // TODO
-  }
+  // #region edit mode
+  editLabel = signal<string>('');
+  editMode = signal<boolean>(false);
 
+  startEdit() {
+    // Already in edit mode
+    if (this.editMode()) return;
+
+    const itemData = this.itemData();
+    // Can't edit if there is no item
+    if (!itemData) return;
+
+    this.editLabel.set(itemData.label);
+    this.editMode.set(true);
+  }
+  editLabelChange(value: string) {
+    const itemData = this.itemData();
+    if (!itemData) {
+      return;
+    }
+    this.updateItem({ ...itemData, label: value });
+  }
+  stopEdit() {
+    // Not in edit mode
+    if (!this.editMode()) return;
+
+    // Wait for the blur event to be processed
+    setTimeout(() => {
+      this.editLabel.set('');
+      this.editMode.set(false);
+    }, 0);
+  }
+  // #endregion edit mode
+
+  // #region actions
   increment() {
     const itemData = this.itemData();
     if (!itemData) {
@@ -76,4 +115,5 @@ export class ShoppingListItemComponent {
   remove() {
     console.log('remove', this.itemData()?.id);
   }
+  // #endregion actions
 }
