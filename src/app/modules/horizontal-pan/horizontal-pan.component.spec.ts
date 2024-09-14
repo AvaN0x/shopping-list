@@ -8,9 +8,8 @@ describe('HorizontalPanComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HorizontalPanComponent]
-    })
-    .compileComponents();
+      imports: [HorizontalPanComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(HorizontalPanComponent);
     component = fixture.componentInstance;

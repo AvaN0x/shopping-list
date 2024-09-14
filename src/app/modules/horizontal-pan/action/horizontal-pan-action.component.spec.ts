@@ -1,18 +1,39 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HorizontalPanActionComponent } from './horizontal-pan-action.component';
+import {
+  HorizontalPanActionLeftComponent,
+  HorizontalPanActionRightComponent,
+} from './horizontal-pan-action.component';
 
-describe('HorizontalPanActionComponent', () => {
-  let component: HorizontalPanActionComponent;
-  let fixture: ComponentFixture<HorizontalPanActionComponent>;
+describe('HorizontalPanActionLeftComponent', () => {
+  let component: HorizontalPanActionLeftComponent;
+  let fixture: ComponentFixture<HorizontalPanActionLeftComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HorizontalPanActionComponent]
-    })
-    .compileComponents();
+      imports: [HorizontalPanActionLeftComponent],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(HorizontalPanActionComponent);
+    fixture = TestBed.createComponent(HorizontalPanActionLeftComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+
+describe('HorizontalPanActionRightComponent', () => {
+  let component: HorizontalPanActionRightComponent;
+  let fixture: ComponentFixture<HorizontalPanActionRightComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HorizontalPanActionRightComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(HorizontalPanActionRightComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

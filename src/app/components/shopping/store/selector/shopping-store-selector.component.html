@@ -1,13 +1,20 @@
 <mat-nav-list>
   @for (store of storesService.stores(); track store.id) {
-  <mat-list-item [activated]="store.id === storesService.currentStore()?.id"
-    (click)="storesService.setCurrentStore(store.id)">
+  <mat-list-item
+    [activated]="store.id === storesService.currentStore()?.id"
+    (click)="storesService.setCurrentStore(store.id)"
+  >
     <span matListItemTitle>
-      {{store.label}}
+      {{ store.label }}
     </span>
 
-    <button mat-icon-button aria-label="Option du magasin" matListItemMeta [matMenuTriggerFor]="contextMenu"
-      (click)="$event.stopPropagation()">
+    <button
+      mat-icon-button
+      aria-label="Option du magasin"
+      matListItemMeta
+      [matMenuTriggerFor]="contextMenu"
+      (click)="$event.stopPropagation()"
+    >
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #contextMenu="matMenu" xPosition="before" yPosition="below">

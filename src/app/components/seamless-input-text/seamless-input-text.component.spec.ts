@@ -8,9 +8,8 @@ describe('SeamlessInputTextComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SeamlessInputTextComponent]
-    })
-    .compileComponents();
+      imports: [SeamlessInputTextComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SeamlessInputTextComponent);
     component = fixture.componentInstance;

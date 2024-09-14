@@ -1,5 +1,9 @@
 <!-- TODO: disable pan if edit mode -->
-<app-horizontal-pan class="item-wrapper" (horizontalPanLeft)="increment()" (horizontalPanRight)="decrement()">
+<app-horizontal-pan
+  class="item-wrapper"
+  (horizontalPanLeft)="increment()"
+  (horizontalPanRight)="decrement()"
+>
   <app-horizontal-pan-action-left aria-label="Ajouter">
     <mat-icon>add_shopping_cart</mat-icon>
   </app-horizontal-pan-action-left>
@@ -15,14 +19,27 @@
     <div class="item-content" appLongPress (longPress)="startEdit()">
       @if (editMode() && editLabel()) {
       <div class="item-edit">
-        <app-seamless-input-text [defaultValue]="editLabel()" (onValueChange)="editLabelChange($event)"
-          (onBlur)="stopEdit()" (onEnter)="stopEdit()" />
+        <app-seamless-input-text
+          [defaultValue]="editLabel()"
+          (onValueChange)="editLabelChange($event)"
+          (onBlur)="stopEdit()"
+          (onEnter)="stopEdit()"
+        />
       </div>
       <div class="item-actions">
-        <button mat-icon-button aria-label="Valider l'édition" (click)="stopEdit()">
+        <button
+          mat-icon-button
+          aria-label="Valider l'édition"
+          (click)="stopEdit()"
+        >
           <mat-icon inline>check</mat-icon>
         </button>
-        <button mat-icon-button aria-label="Supprimer" (click)="remove()" class="item-actions-remove">
+        <button
+          mat-icon-button
+          aria-label="Supprimer"
+          (click)="remove()"
+          class="item-actions-remove"
+        >
           <mat-icon inline>delete</mat-icon>
         </button>
       </div>
@@ -30,12 +47,17 @@
       <div class="item-label">
         @if ((itemData()?.quantity ?? 0) > 1) {
         <span class="item-quantity">x{{ itemData()?.quantity }} </span>
-        }{{ itemData()?.label ?? itemId }}
+        }
+        {{ itemData()?.label ?? itemId }}
       </div>
 
       <div class="item-actions">
-        <button mat-icon-button aria-label="Enlever" (click)="decrement()"
-          [disabled]="(itemData()?.quantity ?? 0) <= 0">
+        <button
+          mat-icon-button
+          aria-label="Enlever"
+          (click)="decrement()"
+          [disabled]="(itemData()?.quantity ?? 0) <= 0"
+        >
           <mat-icon inline>remove</mat-icon>
         </button>
         <button mat-icon-button aria-label="Ajouter" (click)="increment()">

@@ -1,6 +1,9 @@
 <label id="theme-radio-group-label">Apparence</label>
-<mat-radio-group aria-labelledby="theme-radio-group-label" [value]="themeService.currentTheme"
-  (change)="themeService.setThemeMode($event.value)">
+<mat-radio-group
+  aria-labelledby="theme-radio-group-label"
+  [value]="themeService.currentTheme"
+  (change)="themeService.setThemeMode($event.value)"
+>
   <mat-radio-button value="light">
     <mat-icon fontIcon="light_mode"></mat-icon>
     Thème clair
