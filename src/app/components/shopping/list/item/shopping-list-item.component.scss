@@ -110,7 +110,7 @@ app-horizontal-pan-action-right {
   }
 
   &-actions {
-    &-trigger {
+    & > button {
       line-height: 16px;
       font-size: 16px;
       --mdc-icon-button-state-layer-size: 24px;
@@ -118,6 +118,14 @@ app-horizontal-pan-action-right {
 
       mat-icon {
         top: 4px;
+      }
+    }
+
+    &-remove {
+      color: mat.get-theme-color($light-theme, error);
+
+      @include if-dark-theme {
+        color: mat.get-theme-color($dark-theme, error);
       }
     }
   }

@@ -28,15 +28,16 @@ export class SeamlessInputTextComponent
 
   input = viewChild<ElementRef<HTMLInputElement>>('input');
 
-  valueChanged = output<string>();
-  blur = output<FocusEvent>();
+  onEnter = output<void>();
+  onValueChange = output<string>();
+  onBlur = output<FocusEvent>();
 
   constructor() {
     this.subscription = this.value.valueChanges.subscribe(this.updateDebounce);
   }
 
   updateDebounce = debounce(() => {
-    this.valueChanged.emit(this.value.value ?? '');
+    this.onValueChange.emit(this.value.value ?? '');
   }, 1000);
 
   ngOnInit(): void {
@@ -51,8 +52,13 @@ export class SeamlessInputTextComponent
     this.subscription.unsubscribe();
   }
 
-  onblur(event: FocusEvent): void {
+  _onBlur(event: FocusEvent): void {
     this.updateDebounce.flush();
-    this.blur.emit(event);
+    this.onBlur.emit(event);
+  }
+
+  _onEnter(_event: Event): void {
+    this.updateDebounce.flush();
+    this.onEnter.emit();
   }
 }

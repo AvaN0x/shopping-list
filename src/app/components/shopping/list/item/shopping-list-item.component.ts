@@ -109,11 +109,9 @@ export class ShoppingListItemComponent {
       quantity: itemData.quantity - 1,
     });
   }
-  rename() {
-    console.log('rename', this.itemData()?.id);
-  }
   remove() {
     console.log('remove', this.itemData()?.id);
+    // TODO confirmation
   }
   // #endregion actions
 }

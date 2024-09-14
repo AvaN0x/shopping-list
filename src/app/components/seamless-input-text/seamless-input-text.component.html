@@ -1,1 +1,1 @@
-<input type="text" #input [formControl]="value" (blur)="onblur($event)">
+<input type="text" #input [formControl]="value" (blur)="_onBlur($event)" (keyup.enter)="_onEnter($event)">
