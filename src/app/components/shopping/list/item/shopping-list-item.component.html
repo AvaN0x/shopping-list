@@ -5,15 +5,19 @@
   (horizontalPanRight)="decrement()"
 >
   <app-horizontal-pan-action-left aria-label="Ajouter">
-    <mat-icon>add_shopping_cart</mat-icon>
+    <mat-icon>exposure_plus_1</mat-icon>
   </app-horizontal-pan-action-left>
   <app-horizontal-pan-action-right aria-label="Enlever">
-    <mat-icon>remove_shopping_cart</mat-icon>
+    <mat-icon>exposure_neg_1</mat-icon>
   </app-horizontal-pan-action-right>
 
   <app-horizontal-pan-item class="item">
     <div class="item-handle" cdkDragHandle>
+      @if (editMode()) {
+      <mat-icon inline>edit</mat-icon>
+      } @else {
       <mat-icon inline>drag_handle</mat-icon>
+      }
     </div>
 
     <div class="item-content" appLongPress (longPress)="startEdit()">
@@ -60,10 +64,10 @@
           (click)="decrement()"
           [disabled]="(itemData()?.quantity ?? 0) <= 0"
         >
-          <mat-icon inline>remove</mat-icon>
+          <mat-icon inline>exposure_neg_1</mat-icon>
         </button>
         <button mat-icon-button aria-label="Ajouter" (click)="increment()">
-          <mat-icon inline>add</mat-icon>
+          <mat-icon inline>exposure_plus_1</mat-icon>
         </button>
       </div>
       }

@@ -1,7 +1,10 @@
 import {
   Component,
   computed,
+  effect,
+  inject,
   Input,
+  OnDestroy,
   output,
   signal,
   viewChild,
@@ -17,6 +20,14 @@ import { MatMenuModule } from '@angular/material/menu';
 import { NULL_UUID } from '../../../../utils/uuid';
 import { LongPressDirective } from '../../../../directives/long-press.directive';
 import { JsonPipe } from '@angular/common';
+import { ShoppingListItemAddComponent } from '../item/add/shopping-list-item-add.component';
+import { SingleEditService } from '../../../../services/single-edit.service';
+import { CreateItemParams } from '../../../../services/shopping-items.service';
+
+export type CreateItemEvent = {
+  categoryId: string;
+  item: CreateItemParams;
+};
 
 @Component({
   selector: 'app-shopping-list-category',
@@ -24,6 +35,7 @@ import { JsonPipe } from '@angular/common';
   imports: [
     JsonPipe,
     ShoppingListItemComponent,
+    ShoppingListItemAddComponent,
     CdkDropList,
     CdkDrag,
     MatExpansionModule,
@@ -35,7 +47,9 @@ import { JsonPipe } from '@angular/common';
   templateUrl: './shopping-list-category.component.html',
   styleUrl: './shopping-list-category.component.scss',
 })
-export class ShoppingListCategoryComponent {
+export class ShoppingListCategoryComponent implements OnDestroy {
+  singleEditService = inject(SingleEditService);
+
   @Input({ required: true }) category!: ShoppingStoreCategory;
   @Input({ required: true }) categoriesLists!: CdkDropList[];
 
@@ -54,20 +68,68 @@ export class ShoppingListCategoryComponent {
   }
 
   cdkDropListEntered() {
-    console.log('cdkDropListEntered');
+    this.hoveringDropList.set(true);
   }
   cdkDropListExited() {
-    console.log('cdkDropListExited');
+    this.hoveringDropList.set(false);
   }
+
+  ngOnDestroy(): void {
+    this.createItemSessionEffect.destroy();
+  }
+
+  // #region add item
+
+  // #region edit mode
+  /**
+   * Has a value if the user is currently creating an item
+   */
+  createItemSessionId = signal<string | null>(null);
+
+  private createItemSessionEffect = effect(() => {
+    // With the current implementation, the user should not be able to edit multiple items at the same time
+    // but we can add a check here to prevent that in case it happens
+
+    // If we are in edit mode and the current editing item id is not the current item id
+    if (
+      this.createItemSessionId() &&
+      this.singleEditService.currentEditId() !== this.createItemSessionId()
+    ) {
+      // Stop editing
+      this.cancelCreateItem();
+    }
+  });
+
+  add() {
+    // Already in create mode
+    if (this.createItemSessionId()) return;
+
+    this.createItemSessionId.set(this.singleEditService.startEdit());
+  }
+
+  onCreateItem = output<CreateItemEvent>();
+  createItem(label: string) {
+    // Not in create mode
+    if (!this.createItemSessionId()) return;
+
+    this.onCreateItem.emit({
+      categoryId: this.category.id,
+      item: { label },
+    });
+
+    this.createItemSessionId.set(null);
+  }
+  cancelCreateItem() {
+    // Not in create mode
+    if (!this.createItemSessionId()) return;
+
+    this.createItemSessionId.set(null);
+  }
+  // #endregion add item
 
   openMenu() {
     if (this.isNullUUID()) return;
     console.log('------------------------openMenu');
-    // TODO
-  }
-
-  add() {
-    console.log('add');
     // TODO
   }
 

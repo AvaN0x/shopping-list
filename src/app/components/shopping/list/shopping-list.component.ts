@@ -14,7 +14,10 @@ import {
   ShoppingStoreCategory,
 } from '../../../services/shopping-stores.service.modele';
 import { ShoppingItemId } from '../../../services/shopping-items.service.modele';
-import { ShoppingListCategoryComponent } from './category/shopping-list-category.component';
+import {
+  CreateItemEvent,
+  ShoppingListCategoryComponent,
+} from './category/shopping-list-category.component';
 import { NULL_UUID } from '../../../utils/uuid';
 
 @Component({
@@ -28,9 +31,7 @@ export class ShoppingListComponent {
   itemsService = inject(ShoppingItemsService);
   storesService = inject(ShoppingStoresService);
 
-  store = computed<ShoppingStore | undefined>(() =>
-    this.storesService.currentStore()
-  );
+  store = this.storesService.currentStore;
   unsortedCategory: Signal<ShoppingStoreCategory | undefined> = computed(() => {
     const store = this.store();
     if (!store) {
@@ -86,6 +87,33 @@ export class ShoppingListComponent {
     const store = this.store();
     if (store) {
       this.storesService.updateCurrentStore(store);
+    }
+  }
+
+  createItem({ categoryId, item }: CreateItemEvent) {
+    // Create the item
+    const itemId = this.itemsService.createItem(item);
+
+    // If the item was created in the unsorted category, it is already inside of it
+    if (categoryId === NULL_UUID) {
+      return;
+    }
+
+    // Add the item to the category and update the store
+    const store = this.store();
+    if (store) {
+      this.storesService.updateCurrentStore({
+        ...store,
+        categories: store.categories.map((category) => {
+          if (category.id === categoryId) {
+            return {
+              ...category,
+              itemsIds: [...category.itemsIds, itemId],
+            };
+          }
+          return category;
+        }),
+      });
     }
   }
 }

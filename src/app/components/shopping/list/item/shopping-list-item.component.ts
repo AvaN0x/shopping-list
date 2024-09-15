@@ -103,8 +103,11 @@ export class ShoppingListItemComponent implements OnDestroy {
     // Not in edit mode
     if (!this.editMode()) return;
 
+    // TODO: if the new label is empty we should remove the item with not confirmation
+
     // Wait for the blur event to be processed
     setTimeout(() => {
+      this.editSessionId.set(null);
       this.editLabel.set('');
       this.editMode.set(false);
     }, 0);

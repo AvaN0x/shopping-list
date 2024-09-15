@@ -6,6 +6,7 @@
   [category]="category"
   [categoriesLists]="categoriesLists()"
   (onDrop)="drop($event)"
+  (onCreateItem)="createItem($event)"
 />
 }
 <hr />
@@ -14,6 +15,7 @@
   [category]="unsortedCategory()!"
   [categoriesLists]="categoriesLists()"
   (onDrop)="drop($event)"
+  (onCreateItem)="createItem($event)"
 />
 } @else {
 <p>Aucun magasin n'est actuellement sélectionné.</p>

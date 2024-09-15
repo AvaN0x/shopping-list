@@ -19,6 +19,7 @@
             mat-icon-button
             aria-label="Option de la catégorie"
             class="action"
+            [disabled]="createItemSessionId()"
             (click)="$event.stopPropagation(); add()"
           >
             <mat-icon inline>add</mat-icon>
@@ -54,22 +55,31 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-    <div
-      cdkDropList
-      #dropList="cdkDropList"
-      [cdkDropListData]="category.itemsIds"
-      [cdkDropListConnectedTo]="categoriesLists"
-      class="category-list"
-      [cdkDropListSortingDisabled]="isNullUUID()"
-      (cdkDropListEntered)="hoveringDropList.set(true)"
-      (cdkDropListExited)="hoveringDropList.set(false)"
-      (cdkDropListDropped)="drop($event)"
-    >
-      @if (category.itemsIds.length > 0 || hoveringDropList()) { @for (itemId of
-      category.itemsIds; track itemId) {
-      <app-shopping-list-item [itemId]="itemId" cdkDrag />
-      } } @else {
-      <div class="category-list-empty">Aucun élément</div>
+    <div class="category-list-container">
+      <div
+        cdkDropList
+        #dropList="cdkDropList"
+        [cdkDropListData]="category.itemsIds"
+        [cdkDropListConnectedTo]="categoriesLists"
+        class="category-list"
+        [cdkDropListSortingDisabled]="isNullUUID()"
+        (cdkDropListEntered)="cdkDropListEntered()"
+        (cdkDropListExited)="cdkDropListExited()"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @if (category.itemsIds.length > 0 || hoveringDropList() ||
+        createItemSessionId()) { @for (itemId of category.itemsIds; track
+        itemId) {
+        <app-shopping-list-item [itemId]="itemId" cdkDrag />
+        } } @else {
+        <div class="category-list-empty">Aucun élément</div>
+        }
+      </div>
+      @if (createItemSessionId()) {
+      <app-shopping-list-item-add
+        (onValidate)="createItem($event)"
+        (onCancel)="cancelCreateItem()"
+      />
       }
     </div>
   </mat-expansion-panel>
