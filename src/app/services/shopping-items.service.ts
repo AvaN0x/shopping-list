@@ -4,6 +4,7 @@ import {
   ShoppingItemsSchema,
 } from './shopping-items.service.modele';
 import { Storageable } from './storage.service.types';
+import { NULL_UUID } from '../utils/uuid';
 
 @Injectable({
   providedIn: 'root',

@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  booleanAttribute,
   Component,
   ElementRef,
   Input,
@@ -22,7 +23,9 @@ import type { Subscription } from 'rxjs';
 export class SeamlessInputTextComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
-  @Input({ required: true }) defaultValue!: string;
+  @Input({ transform: booleanAttribute }) keepFocus: boolean = false;
+  @Input({}) defaultValue: string = '';
+  @Input({}) placeholder: string = '';
   value = new FormControl('');
   subscription: Subscription;
 
@@ -55,6 +58,9 @@ export class SeamlessInputTextComponent
   _onBlur(event: FocusEvent): void {
     this.updateDebounce.flush();
     this.onBlur.emit(event);
+    if (this.keepFocus) {
+      this.input()?.nativeElement.focus();
+    }
   }
 
   _onEnter(_event: Event): void {

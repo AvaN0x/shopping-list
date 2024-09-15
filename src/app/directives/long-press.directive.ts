@@ -16,7 +16,18 @@ import { computed, Directive, Input, output, signal } from '@angular/core';
   },
 })
 export class LongPressDirective {
-  @Input() longPressDuration: number = 500; // Default duration in milliseconds
+  /**
+   * Duration in milliseconds to trigger the long press event
+   *
+   * @default 400
+   */
+  @Input() longPressDuration: number = 400;
+
+  /**
+   * Maximum movement in pixels to trigger the long press event
+   *
+   * @default 10
+   */
   @Input() longPressMaxMoveThreshold: number = 10;
   longPress = output<MouseEvent>();
   longPressEnd = output<MouseEvent>();

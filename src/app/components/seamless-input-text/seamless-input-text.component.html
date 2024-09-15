@@ -1,6 +1,7 @@
 <input
   type="text"
   #input
+  [placeholder]="placeholder"
   [formControl]="value"
   (blur)="_onBlur($event)"
   (keyup.enter)="_onEnter($event)"

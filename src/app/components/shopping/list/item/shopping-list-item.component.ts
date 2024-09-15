@@ -1,12 +1,13 @@
 import {
   Component,
   computed,
+  effect,
   inject,
   Input,
+  OnDestroy,
   signal,
   Signal,
 } from '@angular/core';
-import { JsonPipe } from '@angular/common';
 import {
   ShoppingItem,
   ShoppingItemId,
@@ -14,20 +15,18 @@ import {
 import { ShoppingItemsService } from '../../../../services/shopping-items.service';
 import { CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { LongPressDirective } from '../../../../directives/long-press.directive';
 import { HorizontalPanModule } from '../../../../modules/horizontal-pan/horizontal-pan.module';
 import { SeamlessInputTextComponent } from '../../../seamless-input-text/seamless-input-text.component';
+import { SingleEditService } from '../../../../services/single-edit.service';
 
 @Component({
   selector: 'app-shopping-list-item',
   standalone: true,
   imports: [
-    JsonPipe,
     CdkDragHandle,
     MatIconModule,
-    MatMenuModule,
     MatButtonModule,
     LongPressDirective,
     HorizontalPanModule,
@@ -39,8 +38,9 @@ import { SeamlessInputTextComponent } from '../../../seamless-input-text/seamles
     '[class.no-quantity]': 'itemData()?.quantity <= 0',
   },
 })
-export class ShoppingListItemComponent {
+export class ShoppingListItemComponent implements OnDestroy {
   itemsService = inject(ShoppingItemsService);
+  singleEditService = inject(SingleEditService);
 
   @Input({ required: true }) itemId!: ShoppingItemId;
   itemData: Signal<ShoppingItem | undefined> = computed(
@@ -57,9 +57,28 @@ export class ShoppingListItemComponent {
     });
   }
 
+  ngOnDestroy(): void {
+    this.editSessionEffect.destroy();
+  }
+
   // #region edit mode
   editLabel = signal<string>('');
+  editSessionId = signal<string | null>(null);
   editMode = signal<boolean>(false);
+
+  private editSessionEffect = effect(() => {
+    // With the current implementation, the user should not be able to edit multiple items at the same time
+    // but we can add a check here to prevent that in case it happens
+
+    // If we are in edit mode and the current editing item id is not the current item id
+    if (
+      this.editMode() &&
+      this.singleEditService.currentEditId() !== this.editSessionId()
+    ) {
+      // Stop editing
+      this.stopEdit();
+    }
+  });
 
   startEdit() {
     // Already in edit mode
@@ -69,6 +88,7 @@ export class ShoppingListItemComponent {
     // Can't edit if there is no item
     if (!itemData) return;
 
+    this.editSessionId.set(this.singleEditService.startEdit());
     this.editLabel.set(itemData.label);
     this.editMode.set(true);
   }

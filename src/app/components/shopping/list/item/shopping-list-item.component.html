@@ -20,6 +20,8 @@
       @if (editMode() && editLabel()) {
       <div class="item-edit">
         <app-seamless-input-text
+          keepFocus
+          placeholder="Nom de l'article"
           [defaultValue]="editLabel()"
           (onValueChange)="editLabelChange($event)"
           (onBlur)="stopEdit()"
