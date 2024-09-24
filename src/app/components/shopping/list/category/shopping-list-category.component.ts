@@ -25,6 +25,8 @@ import { JsonPipe } from '@angular/common';
 import { ShoppingListItemAddComponent } from '../item/add/shopping-list-item-add.component';
 import { SingleEditService } from '../../../../services/single-edit.service';
 import { CreateItemParams } from '../../../../services/shopping-items.service';
+import { SeamlessInputTextComponent } from '../../../seamless-input-text/seamless-input-text.component';
+import { ShoppingStoresService } from '../../../../services/shopping-stores.service';
 
 export type CreateItemEvent = {
   categoryId: string;
@@ -44,12 +46,14 @@ export type CreateItemEvent = {
     MatMenuModule,
     MatButtonModule,
     LongPressDirective,
+    SeamlessInputTextComponent,
   ],
   templateUrl: './shopping-list-category.component.html',
   styleUrl: './shopping-list-category.component.scss',
 })
 export class ShoppingListCategoryComponent implements OnDestroy {
   singleEditService = inject(SingleEditService);
+  storesService = inject(ShoppingStoresService);
 
   @Input({ required: true }) category!: ShoppingStoreCategory;
   @Input({ required: true }) categoriesLists!: CdkDropList[];
@@ -76,12 +80,11 @@ export class ShoppingListCategoryComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.editSessionEffect.destroy();
     this.createItemSessionEffect.destroy();
   }
 
   // #region add item
-
-  // #region edit mode
   /**
    * Has a value if the user is currently creating an item
    */
@@ -134,15 +137,65 @@ export class ShoppingListCategoryComponent implements OnDestroy {
     this.panelOpenState.set(!this.panelOpenState());
   }
 
-  openMenu() {
-    if (this.isNullUUID()) return;
+  // #region edit mode
+  updateCategory(category: ShoppingStoreCategory) {
+    if (category.id !== this.category.id) {
+      throw new Error(
+        `Category with id ${category.id} is not the current one (${this.category.id})`
+      );
+    }
 
-    console.log('------------------------openMenu');
-    // TODO
+    this.storesService.updateCurrentStoreCategory(category);
   }
 
+  editLabel = signal<string>('');
+  editSessionId = signal<string | null>(null);
+  editMode = signal<boolean>(false);
+
+  private editSessionEffect = effect(() => {
+    // With the current implementation, the user should not be able to edit multiple items at the same time
+    // but we can add a check here to prevent that in case it happens
+
+    // If we are in edit mode and the current editing item id is not the current item id
+    if (
+      this.editMode() &&
+      this.singleEditService.currentEditId() !== this.editSessionId()
+    ) {
+      // Stop editing
+      this.stopEdit();
+    }
+  });
+
+  startEdit() {
+    // Already in edit mode
+    if (this.editMode()) return;
+
+    const category = this.category;
+    // Can't edit if there is no item
+    if (!category) return;
+
+    this.editSessionId.set(this.singleEditService.startEdit());
+    this.editLabel.set(category.label);
+    this.editMode.set(true);
+  }
+  editLabelChange(value: string) {
+    this.updateCategory({ ...this.category, label: value });
+  }
+  stopEdit() {
+    // Not in edit mode
+    if (!this.editMode()) return;
+
+    // Wait for the blur event to be processed
+    setTimeout(() => {
+      this.editSessionId.set(null);
+      this.editLabel.set('');
+      this.editMode.set(false);
+    }, 0);
+  }
+  // #endregion edit mode
+
   remove() {
-    console.log('remove');
+    console.log('remove', this.category.id);
     // TODO
   }
 }

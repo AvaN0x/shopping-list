@@ -103,7 +103,7 @@ export class ShoppingListItemComponent implements OnDestroy {
     // Not in edit mode
     if (!this.editMode()) return;
 
-    // TODO: if the new label is empty we should remove the item with not confirmation
+    // TODO: if the new label is empty we should remove the item without confirmation
 
     // Wait for the blur event to be processed
     setTimeout(() => {
@@ -135,6 +135,7 @@ export class ShoppingListItemComponent implements OnDestroy {
   remove() {
     console.log('remove', this.itemData()?.id);
     // TODO confirmation
+    // TODO remove
   }
   // #endregion actions
 }

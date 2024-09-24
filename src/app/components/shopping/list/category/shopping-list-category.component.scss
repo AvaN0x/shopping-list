@@ -27,12 +27,10 @@ $min-height: calc(var(--shopping-list-item-min-height) + 10px);
       justify-content: center;
     }
 
-    ::ng-deep {
-      mat-expansion-panel-header.holding {
-        background-color: var(
-          --mat-expansion-header-hover-state-layer-color
-        ) !important;
-      }
+    &.holding {
+      background-color: var(
+        --mat-expansion-header-hover-state-layer-color
+      ) !important;
     }
 
     .action {
@@ -43,6 +41,14 @@ $min-height: calc(var(--shopping-list-item-min-height) + 10px);
 
       mat-icon {
         top: 4px;
+      }
+
+      &-remove {
+        color: mat.get-theme-color($light-theme, error);
+
+        @include if-dark-theme {
+          color: mat.get-theme-color($dark-theme, error);
+        }
       }
     }
   }

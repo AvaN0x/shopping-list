@@ -1,7 +1,7 @@
 <div
   class="category-list-header"
   appLongPress
-  (longPress)="openMenu()"
+  (longPress)="startEdit()"
   (longPressEnd)="togglePanel($event)"
 >
   <mat-icon
@@ -9,9 +9,39 @@
     [style.transform]="panelOpenState() ? 'rotate(90deg)' : ''"
     >keyboard_arrow_right</mat-icon
   >
-  <span class="category-list-header-label">
+  @if (editMode() && editLabel()) {
+  <div class="category-list-header-label">
+    <app-seamless-input-text
+      keepFocus
+      placeholder="Nom de la catégorie"
+      [defaultValue]="editLabel()"
+      (onValueChange)="editLabelChange($event)"
+      (onBlur)="stopEdit()"
+      (onEnter)="stopEdit()"
+    />
+  </div>
+  <div>
+    <button
+      mat-icon-button
+      aria-label="Valider l'édition"
+      class="action"
+      (click)="stopEdit()"
+    >
+      <mat-icon inline>check</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      aria-label="Supprimer"
+      class="action action-remove"
+      (click)="remove()"
+    >
+      <mat-icon inline>delete</mat-icon>
+    </button>
+  </div>
+  } @else {
+  <div class="category-list-header-label">
     {{ category.label }}
-  </span>
+  </div>
   <div>
     <button
       mat-icon-button
@@ -23,6 +53,7 @@
       <mat-icon inline>add</mat-icon>
     </button>
   </div>
+  }
 </div>
 
 <div class="category-list-body">
@@ -43,12 +74,11 @@
     <app-shopping-list-item [itemId]="itemId" cdkDrag />
     } } @else {
     <div class="category-list-body-empty">Aucun élément</div>
+    } @if (createItemSessionId()) {
+    <app-shopping-list-item-add
+      (onValidate)="createItem($event)"
+      (onCancel)="cancelCreateItem()"
+    />
     } }
   </div>
-  @if (panelOpenState() && createItemSessionId()) {
-  <app-shopping-list-item-add
-    (onValidate)="createItem($event)"
-    (onCancel)="cancelCreateItem()"
-  />
-  }
 </div>

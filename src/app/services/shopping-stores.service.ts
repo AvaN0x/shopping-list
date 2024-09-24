@@ -1,6 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
 import {
   ShoppingStore,
+  ShoppingStoreCategory,
   ShoppingStores,
   ShoppingStoresSchema,
 } from './shopping-stores.service.modele';
@@ -24,6 +25,7 @@ export class ShoppingStoresService implements Storageable {
     }
     this.currentStoreIndex.update(() => index);
   }
+  // #region current store
   updateCurrentStore(store: ShoppingStore) {
     const currentStore = this.currentStore();
     if (!currentStore || currentStore.id !== store.id) {
@@ -34,6 +36,64 @@ export class ShoppingStoresService implements Storageable {
       return [...stores];
     });
   }
+
+  // #region current store categories
+  addCurrentStoreCategory(category: ShoppingStoreCategory) {
+    const currentStore = this.currentStore();
+    if (!currentStore) {
+      throw new Error(`Current store does not exist`);
+    }
+
+    this.updateCurrentStore({
+      ...currentStore,
+      categories: [...currentStore.categories, { ...category }],
+    });
+  }
+  updateCurrentStoreCategory(category: ShoppingStoreCategory) {
+    const currentStore = this.currentStore();
+    if (!currentStore) {
+      throw new Error(`Current store does not exist`);
+    }
+    const index = currentStore.categories.findIndex(
+      (c) => c.id === category.id
+    );
+    if (index === -1) {
+      throw new Error(
+        `Category with id ${category.id} not found in current store`
+      );
+    }
+
+    this.updateCurrentStore({
+      ...currentStore,
+      categories: [
+        ...currentStore.categories.slice(0, index),
+        { ...category },
+        ...currentStore.categories.slice(index + 1),
+      ],
+    });
+  }
+  removeCurrentStoreCategory(categoryId: ShoppingStoreCategory['id']) {
+    const currentStore = this.currentStore();
+    if (!currentStore) {
+      throw new Error(`Current store does not exist`);
+    }
+    const index = currentStore.categories.findIndex((c) => c.id === categoryId);
+    if (index === -1) {
+      throw new Error(
+        `Category with id ${categoryId} not found in current store`
+      );
+    }
+
+    this.updateCurrentStore({
+      ...currentStore,
+      categories: [
+        ...currentStore.categories.slice(0, index),
+        ...currentStore.categories.slice(index + 1),
+      ],
+    });
+  }
+  // #endregion current store categories
+  // #endregion current store
 
   populate(data: string): void {
     const stores = ShoppingStoresSchema.parse(JSON.parse(data));
