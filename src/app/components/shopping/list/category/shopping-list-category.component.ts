@@ -13,12 +13,14 @@ import { ShoppingStoreCategory } from '../../../../services/shopping-stores.serv
 import { CdkDragDrop, CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 import { ShoppingItemId } from '../../../../services/shopping-items.service.modele';
 import { ShoppingListItemComponent } from '../item/shopping-list-item.component';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { NULL_UUID } from '../../../../utils/uuid';
-import { LongPressDirective } from '../../../../directives/long-press.directive';
+import {
+  LongPressDirective,
+  LongPressEndEvent,
+} from '../../../../directives/long-press.directive';
 import { JsonPipe } from '@angular/common';
 import { ShoppingListItemAddComponent } from '../item/add/shopping-list-item-add.component';
 import { SingleEditService } from '../../../../services/single-edit.service';
@@ -38,7 +40,6 @@ export type CreateItemEvent = {
     ShoppingListItemAddComponent,
     CdkDropList,
     CdkDrag,
-    MatExpansionModule,
     MatIconModule,
     MatMenuModule,
     MatButtonModule,
@@ -104,6 +105,7 @@ export class ShoppingListCategoryComponent implements OnDestroy {
     // Already in create mode
     if (this.createItemSessionId()) return;
 
+    this.panelOpenState.set(true);
     this.createItemSessionId.set(this.singleEditService.startEdit());
   }
 
@@ -127,16 +129,18 @@ export class ShoppingListCategoryComponent implements OnDestroy {
   }
   // #endregion add item
 
+  togglePanel(event: LongPressEndEvent) {
+    if (event.pressSuccess || event.pressDuration > 200) return;
+    this.panelOpenState.set(!this.panelOpenState());
+  }
+
   openMenu() {
     if (this.isNullUUID()) return;
+
     console.log('------------------------openMenu');
     // TODO
   }
 
-  rename() {
-    console.log('rename');
-    // TODO
-  }
   remove() {
     console.log('remove');
     // TODO

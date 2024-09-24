@@ -1,5 +1,10 @@
 import { computed, Directive, Input, output, signal } from '@angular/core';
 
+export type LongPressEndEvent = MouseEvent & {
+  pressSuccess: boolean;
+  pressDuration: number;
+};
+
 @Directive({
   selector: '[appLongPress]',
   exportAs: 'appLongPress',
@@ -30,9 +35,12 @@ export class LongPressDirective {
    */
   @Input() longPressMaxMoveThreshold: number = 10;
   longPress = output<MouseEvent>();
-  longPressEnd = output<MouseEvent>();
+  longPressEnd = output<LongPressEndEvent>();
 
   private timer = signal<number | undefined>(undefined);
+  private pressSuccess = signal<boolean>(false);
+  private pressStartTime = signal<number>(0);
+
   private startMouseX = signal<number>(0);
   private startMouseY = signal<number>(0);
   private currentMouseX = signal<number>(0);
@@ -83,6 +91,8 @@ export class LongPressDirective {
     this.currentMouseX.set(event.clientX);
     this.currentMouseY.set(event.clientY);
 
+    this.pressSuccess.set(false);
+    this.pressStartTime.set(new Date().getTime());
     this.timer.set(
       setTimeout(() => {
         // Only allow if user moved below threshold
@@ -90,6 +100,7 @@ export class LongPressDirective {
           Math.abs(this.horizontalDiff()) < this.longPressMaxMoveThreshold &&
           Math.abs(this.verticalDiff()) < this.longPressMaxMoveThreshold
         ) {
+          this.pressSuccess.set(true);
           this.longPress.emit(event);
         }
       }, this.longPressDuration)
@@ -98,17 +109,22 @@ export class LongPressDirective {
 
   endTimer(event: MouseEvent) {
     if (this.timer()) {
+      event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
 
       clearTimeout(this.timer());
 
+      const pressSuccess = this.pressSuccess();
+      const pressDuration = new Date().getTime() - this.pressStartTime();
       this.timer.set(undefined);
+      this.pressStartTime.set(0);
       this.startMouseX.set(0);
       this.startMouseY.set(0);
       this.currentMouseX.set(0);
       this.currentMouseY.set(0);
-      this.longPressEnd.emit(event);
+      this.pressSuccess.set(false);
+      this.longPressEnd.emit({ ...event, pressSuccess, pressDuration });
     }
   }
 }
