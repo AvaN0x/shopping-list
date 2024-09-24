@@ -2,10 +2,14 @@ import { computed, Injectable, signal } from '@angular/core';
 import {
   ShoppingStore,
   ShoppingStoreCategory,
+  ShoppingStoreCategorySchema,
   ShoppingStores,
   ShoppingStoresSchema,
 } from './shopping-stores.service.modele';
 import { Storageable } from './storage.service.types';
+import { uuid } from '../utils/uuid';
+
+export type CreateStoreCategoryParams = Omit<ShoppingStoreCategory, 'id'>;
 
 @Injectable({
   providedIn: 'root',
@@ -38,16 +42,25 @@ export class ShoppingStoresService implements Storageable {
   }
 
   // #region current store categories
-  addCurrentStoreCategory(category: ShoppingStoreCategory) {
+  /**
+   * Add a new category to the current store
+   * @param category The category to create
+   * @returns The id of the created category
+   * @throws If the category is invalid
+   */
+  addCurrentStoreCategory(category: CreateStoreCategoryParams) {
     const currentStore = this.currentStore();
     if (!currentStore) {
       throw new Error(`Current store does not exist`);
     }
 
+    const id = uuid();
+    const _category = ShoppingStoreCategorySchema.parse({ id, ...category });
     this.updateCurrentStore({
       ...currentStore,
-      categories: [...currentStore.categories, { ...category }],
+      categories: [...currentStore.categories, _category],
     });
+    return uuid;
   }
   updateCurrentStoreCategory(category: ShoppingStoreCategory) {
     const currentStore = this.currentStore();

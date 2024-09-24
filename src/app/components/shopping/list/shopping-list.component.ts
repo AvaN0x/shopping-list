@@ -19,11 +19,12 @@ import {
   ShoppingListCategoryComponent,
 } from './category/shopping-list-category.component';
 import { NULL_UUID } from '../../../utils/uuid';
+import { ShoppingListCategoryAddComponent } from './category/add/shopping-list-category-add.component';
 
 @Component({
   selector: 'app-shopping-list',
   standalone: true,
-  imports: [ShoppingListCategoryComponent],
+  imports: [ShoppingListCategoryComponent, ShoppingListCategoryAddComponent],
   templateUrl: './shopping-list.component.html',
   styleUrl: './shopping-list.component.scss',
 })

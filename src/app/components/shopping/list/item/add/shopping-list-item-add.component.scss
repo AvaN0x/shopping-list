@@ -3,7 +3,6 @@
 @import "mixins";
 
 :host {
-  // TODO: fix border top if list is empty
   & .item {
     border-top: 1px solid;
     border-color: mat.get-theme-color($light-theme, secondary, 60);
@@ -20,7 +19,6 @@
   gap: 4px;
 
   &-handle {
-    cursor: grab;
     z-index: 2;
     font-size: 14px;
     padding: 4px 4px 4px 10px;

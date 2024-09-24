@@ -1,0 +1,43 @@
+<div class="category">
+  @if (!creating()) {
+  <div class="category-start-edit">
+    <button mat-button (click)="startEdit()">
+      <mat-icon inline>add</mat-icon>
+      <span>Ajouter une catégorie</span>
+    </button>
+  </div>
+  } @else {
+  <div class="category-add">
+    <div class="category-add-icon">
+      <mat-icon inline>edit</mat-icon>
+    </div>
+
+    <div class="category-add-edit">
+      <app-seamless-input-text
+        keepFocus
+        placeholder="Nom de la catégorie"
+        (onValueChange)="editLabelChange($event)"
+        (onBlur)="validate()"
+        (onEnter)="validate()"
+      />
+    </div>
+    <div class="category-add-actions">
+      <button
+        mat-icon-button
+        aria-label="Valider l'ajout de la catégorie"
+        (click)="validate()"
+      >
+        <mat-icon inline>check</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        aria-label="Annuler"
+        (click)="cancel()"
+        class="category-add-actions-cancel"
+      >
+        <mat-icon inline>close</mat-icon>
+      </button>
+    </div>
+  </div>
+  }
+</div>
