@@ -11,7 +11,7 @@
         [defaultValue]="label()"
         (onValueChange)="editLabelChange($event)"
         (onBlur)="validate()"
-        (onEnter)="validate()"
+        (onEnter)="validate({ enter: true })"
       />
     </div>
     <div class="item-actions">

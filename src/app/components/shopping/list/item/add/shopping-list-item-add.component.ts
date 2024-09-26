@@ -3,6 +3,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { SeamlessInputTextComponent } from '../../../../seamless-input-text/seamless-input-text.component';
 
+export type OnValidateEvent = { label: string; enter?: boolean };
+
 @Component({
   selector: 'app-shopping-list-item-add',
   standalone: true,
@@ -13,16 +15,16 @@ import { SeamlessInputTextComponent } from '../../../../seamless-input-text/seam
 export class ShoppingListItemAddComponent {
   label = signal<string>('');
 
-  onValidate = output<string>();
+  onValidate = output<OnValidateEvent>();
   onCancel = output<void>();
 
   editLabelChange(value: string) {
     this.label.set(value);
   }
-  validate() {
+  validate({ enter }: { enter?: boolean } = {}) {
     const trimmed = this.label().trim();
     if (trimmed.length > 0) {
-      this.onValidate.emit(trimmed);
+      this.onValidate.emit({ label: trimmed, enter });
     } else {
       this.cancel();
     }

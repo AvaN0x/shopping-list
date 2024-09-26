@@ -22,7 +22,10 @@ import {
   LongPressEndEvent,
 } from '../../../../directives/long-press.directive';
 import { JsonPipe } from '@angular/common';
-import { ShoppingListItemAddComponent } from '../item/add/shopping-list-item-add.component';
+import {
+  OnValidateEvent,
+  ShoppingListItemAddComponent,
+} from '../item/add/shopping-list-item-add.component';
 import { SingleEditService } from '../../../../services/single-edit.service';
 import { CreateItemParams } from '../../../../services/shopping-items.service';
 import { SeamlessInputTextComponent } from '../../../seamless-input-text/seamless-input-text.component';
@@ -113,7 +116,7 @@ export class ShoppingListCategoryComponent implements OnDestroy {
   }
 
   onCreateItem = output<CreateItemEvent>();
-  createItem(label: string) {
+  createItem({ label, enter }: OnValidateEvent) {
     // Not in create mode
     if (!this.createItemSessionId()) return;
 
@@ -123,6 +126,14 @@ export class ShoppingListCategoryComponent implements OnDestroy {
     });
 
     this.createItemSessionId.set(null);
+
+    // If the user pressed enter, we should start creating a new item
+    if (enter) {
+      // TODO: The timeout can be removed if the seamless input handle changing the label value directly
+      setTimeout(() => {
+        this.add();
+      }, 0);
+    }
   }
   cancelCreateItem() {
     // Not in create mode
