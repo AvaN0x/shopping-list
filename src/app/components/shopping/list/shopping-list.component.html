@@ -1,6 +1,6 @@
-@if (store()) {
-<p>{{ store()!.label }}</p>
-@for (category of store()!.categories; track category.id) {
+@if (store(); as store) {
+<p>{{ store!.label }}</p>
+@for (category of store.categories; track category.id) {
 <app-shopping-list-category
   #categoryList
   [category]="category"
