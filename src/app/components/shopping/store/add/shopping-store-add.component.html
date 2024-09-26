@@ -1,0 +1,36 @@
+@if (!creating()) {
+<button mat-button (click)="startEdit()" class="store-add-trigger">
+  <mat-icon inline>add</mat-icon>
+  <span>Ajouter un magasin</span>
+</button>
+} @else {
+<div class="store-add">
+  <div class="store-add-edit">
+    <app-seamless-input-text
+      keepFocus
+      placeholder="Nom du magasin"
+      [defaultValue]="label()"
+      (onValueChange)="editLabelChange($event)"
+      (onBlur)="validate()"
+      (onEnter)="validate()"
+    />
+  </div>
+  <div class="store-add-actions">
+    <button
+      mat-icon-button
+      aria-label="Valider l'ajout du magasin"
+      (click)="validate()"
+    >
+      <mat-icon inline>check</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      aria-label="Annuler"
+      (click)="cancel()"
+      class="store-add-actions-cancel"
+    >
+      <mat-icon inline>close</mat-icon>
+    </button>
+  </div>
+</div>
+}

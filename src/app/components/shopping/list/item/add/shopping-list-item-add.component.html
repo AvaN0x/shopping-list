@@ -8,6 +8,7 @@
       <app-seamless-input-text
         keepFocus
         placeholder="Nom de l'article"
+        [defaultValue]="label()"
         (onValueChange)="editLabelChange($event)"
         (onBlur)="validate()"
         (onEnter)="validate()"

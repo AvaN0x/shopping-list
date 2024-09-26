@@ -4,11 +4,13 @@ import {
   ShoppingStoreCategory,
   ShoppingStoreCategorySchema,
   ShoppingStores,
+  ShoppingStoreSchema,
   ShoppingStoresSchema,
 } from './shopping-stores.service.modele';
 import { Storageable } from './storage.service.types';
-import { uuid } from '../utils/uuid';
+import { NULL_UUID, uuid } from '../utils/uuid';
 
+export type CreateStoreParams = Omit<ShoppingStore, 'id' | 'categories'>;
 export type CreateStoreCategoryParams = Omit<ShoppingStoreCategory, 'id'>;
 
 @Injectable({
@@ -40,6 +42,27 @@ export class ShoppingStoresService implements Storageable {
       return [...stores];
     });
   }
+  addStore(store: CreateStoreParams, duplicateId?: ShoppingStore['id']) {
+    const id = uuid();
+    const categories = [];
+    // If we want to duplicate a store, we copy its categories
+    if (duplicateId && duplicateId !== NULL_UUID) {
+      const duplicateStore = this.stores().find((s) => s.id === duplicateId);
+      if (duplicateStore) {
+        categories.push(
+          ...duplicateStore.categories.map(({ id: _id, itemsIds, ...c }) => ({
+            id: uuid(),
+            itemsIds: [...itemsIds],
+            ...c,
+          }))
+        );
+      }
+    }
+
+    const _store = ShoppingStoreSchema.parse({ ...store, id, categories });
+    this.stores.update((stores) => [...stores, _store]);
+    return id;
+  }
 
   // #region current store categories
   /**
@@ -60,7 +83,7 @@ export class ShoppingStoresService implements Storageable {
       ...currentStore,
       categories: [...currentStore.categories, _category],
     });
-    return uuid;
+    return id;
   }
   updateCurrentStoreCategory(category: ShoppingStoreCategory) {
     const currentStore = this.currentStore();

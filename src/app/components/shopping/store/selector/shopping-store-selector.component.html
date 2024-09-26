@@ -22,7 +22,7 @@
         <mat-icon>label</mat-icon>
         Renommer
       </button>
-      <button mat-menu-item (click)="duplicate(store.id)">
+      <button mat-menu-item (click)="storeAdd.startEdit(store.id)">
         <mat-icon>content_copy</mat-icon>
         Dupliquer
       </button>
@@ -33,4 +33,5 @@
     </mat-menu>
   </mat-list-item>
   }
+  <app-shopping-store-add #storeAdd />
 </mat-nav-list>

@@ -15,6 +15,7 @@ $min-height: calc(var(--shopping-list-item-min-height) + 10px);
     margin-right: 2px;
     font-size: 14px;
     vertical-align: middle;
+    overflow: hidden;
 
     @include if-dark-theme {
       border-color: mat.get-theme-color($dark-theme, secondary, 20);
@@ -25,6 +26,10 @@ $min-height: calc(var(--shopping-list-item-min-height) + 10px);
       display: flex;
       flex-direction: column;
       justify-content: center;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     &.holding {

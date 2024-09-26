@@ -1,0 +1,43 @@
+@use "@angular/material" as mat;
+@import "variables";
+@import "mixins";
+
+.store-add {
+  &-trigger {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  margin: 2px 0;
+  height: var(--mdc-list-list-item-one-line-container-height);
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 4px;
+
+  &-edit {
+    flex: 1;
+  }
+  &-actions {
+    & > button {
+      line-height: 16px;
+      font-size: 16px;
+      --mdc-icon-button-state-layer-size: 24px;
+      display: inline-flex;
+
+      mat-icon {
+        top: 4px;
+      }
+    }
+
+    &-cancel {
+      color: mat.get-theme-color($light-theme, error);
+
+      @include if-dark-theme {
+        color: mat.get-theme-color($dark-theme, error);
+      }
+    }
+  }
+}
