@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import {
   ShoppingItem,
   ShoppingItemSchema,
@@ -14,6 +14,8 @@ export type CreateItemParams = Omit<ShoppingItem, 'id' | 'quantity'>;
   providedIn: 'root',
 })
 export class ShoppingItemsService implements Storageable {
+  readonly storageName = 'shopping-items';
+
   items = signal<ShoppingItemsRecord>({});
 
   /**
@@ -37,7 +39,7 @@ export class ShoppingItemsService implements Storageable {
     );
   }
 
-  serialize(): string {
-    return JSON.stringify(Object.values(this.items()));
-  }
+  serialize = computed<string>(() =>
+    JSON.stringify(Object.values(this.items()))
+  );
 }

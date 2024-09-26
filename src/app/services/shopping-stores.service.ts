@@ -17,6 +17,8 @@ export type CreateStoreCategoryParams = Omit<ShoppingStoreCategory, 'id'>;
   providedIn: 'root',
 })
 export class ShoppingStoresService implements Storageable {
+  readonly storageName = 'shopping-stores';
+
   stores = signal<ShoppingStores>([]);
   private currentStoreIndex = signal(0);
 
@@ -136,7 +138,5 @@ export class ShoppingStoresService implements Storageable {
     this.stores.update(() => stores);
   }
 
-  serialize(): string {
-    return JSON.stringify(this.stores());
-  }
+  serialize = computed<string>(() => JSON.stringify(this.stores()));
 }
