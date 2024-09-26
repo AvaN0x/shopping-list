@@ -76,6 +76,7 @@
     <div class="category-list-body-empty">Aucun élément</div>
     } @if (createItemSessionId()) {
     <app-shopping-list-item-add
+      #itemAdd
       (onValidate)="createItem($event)"
       (onCancel)="cancelCreateItem()"
     />

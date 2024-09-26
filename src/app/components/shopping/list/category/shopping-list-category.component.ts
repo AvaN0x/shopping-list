@@ -107,11 +107,13 @@ export class ShoppingListCategoryComponent implements OnDestroy {
     }
   });
 
+  itemAdd = viewChild<ShoppingListItemAddComponent>('itemAdd');
   add() {
     // Already in create mode
     if (this.createItemSessionId()) return;
 
     this.panelOpenState.set(true);
+    this.itemAdd()?.reset();
     this.createItemSessionId.set(this.singleEditService.startEdit());
   }
 
@@ -129,10 +131,7 @@ export class ShoppingListCategoryComponent implements OnDestroy {
 
     // If the user pressed enter, we should start creating a new item
     if (enter) {
-      // TODO: The timeout can be removed if the seamless input handle changing the label value directly
-      setTimeout(() => {
-        this.add();
-      }, 0);
+      this.add();
     }
   }
   cancelCreateItem() {

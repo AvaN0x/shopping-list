@@ -1,4 +1,4 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, output, signal, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { SeamlessInputTextComponent } from '../../../../seamless-input-text/seamless-input-text.component';
@@ -14,6 +14,8 @@ export type OnValidateEvent = { label: string; enter?: boolean };
 })
 export class ShoppingListItemAddComponent {
   label = signal<string>('');
+
+  input = viewChild<SeamlessInputTextComponent>('input');
 
   onValidate = output<OnValidateEvent>();
   onCancel = output<void>();
@@ -31,5 +33,10 @@ export class ShoppingListItemAddComponent {
   }
   cancel() {
     this.onCancel.emit();
+  }
+
+  reset() {
+    this.label.set('');
+    this.input()?.reset();
   }
 }

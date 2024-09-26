@@ -44,7 +44,7 @@ export class SeamlessInputTextComponent
   }, 1000);
 
   ngOnInit(): void {
-    this.value.setValue(this.defaultValue);
+    this.reset();
   }
 
   ngAfterViewInit(): void {
@@ -66,5 +66,9 @@ export class SeamlessInputTextComponent
   _onEnter(_event: Event): void {
     this.updateDebounce.flush();
     this.onEnter.emit();
+  }
+
+  reset() {
+    this.value.setValue(this.defaultValue);
   }
 }

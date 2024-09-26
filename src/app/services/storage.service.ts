@@ -38,7 +38,6 @@ export class StorageService implements OnDestroy {
 
   save() {
     for (const service of this.services) {
-      console.log('save', service.storageName);
       localStorage.setItem(service.storageName, service.serialize());
     }
   }
